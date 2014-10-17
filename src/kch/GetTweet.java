@@ -42,7 +42,7 @@ public class GetTweet {
 		try{
 			FileWriter out = new FileWriter(outFile);
 			Twitter twitter = tf.getInstance();
-			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,100));
+			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,10));
 			for(Status status:statusList){
 				out.write(format(status.getText())+"\n");
 			}
