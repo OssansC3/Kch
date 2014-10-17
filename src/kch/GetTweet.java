@@ -16,10 +16,10 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 public class GetTweet {
 
-	private static final String key = "";
-	private static final String secret = "";
-	private static final String token = "";
-	private static final String tokenSecret = "";
+	private static final String key = "NrIspqi4knQyxKI9JOh4flIQc";
+	private static final String secret = "tM9ZzMCiYlXkEkcGLHm9ayPRPzxXUdz5ki43YLLzrXRnlNYHrH";
+	private static final String token = "2859875251-E1NKXDeGrI5kqhjaQWE74eeXLEYEhn6TSYvG6q0";
+	private static final String tokenSecret = "09kYd1TVf1dujq2vxmxNFNSx3SERNZr9AWqUe0Gtwuh00";
 	private static TwitterFactory tf;
 
 	public GetTweet(){
