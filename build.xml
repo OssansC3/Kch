@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<project default="deploy" basedir=".">
+
+	<!-- warファイルの設定 -->
+	<property name="service.name" value="axis2demo" />
+	<property name="aar.home" value="C:/tomcat/axis2/webapps" />
+	<property name="dest" value="build" />
+	<property name="dest.metainf" value="${dest}/META-INF" />
+	<property name="dest.lib" value="${dest}/lib" />
+	<property name="tomcat.home" value="C:/pbl/tomcat/webapps" />
+	<property name="axis2.home" value="C:/pbl/tomcat/webapps/axis2/WEB-INF/services" />
+
+
+	<!-- クリーン -->
+	<target name="clean">
+		<delete dir="${dest}" />
+	</target>
+
+	<!-- 前処理タスク．作業ディレクトリを掘る -->
+	<target name="prepare">
+		<mkdir dir="${dest}" />
+		<mkdir dir="${dest.metainf}" />
+		<mkdir dir="${dest.lib}" />
+	</target>
+
+	<!-- ビルドタスク．cleanとprepare実行後 -->
+	<target name="generate.service" depends="clean,prepare">
+
+		<!-- libをコピー -->
+		<copy todir="${dest.lib}" overwrite="true">
+			<fileset dir="lib/" />
+		</copy>
+
+		<!-- services.xmlのコピー -->
+		<copy file="services.xml" todir="${dest.metainf}" />
+
+		<!-- ビルドに必要なクラスパス -->
+		<path id="build.classpath">
+			<fileset dir="lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+		<!-- コンパイル．作業ディレクトリにクラス生成．クラスパスは上で定義したもの -->
+		<javac encoding="utf-8" srcdir="src" destdir="${dest}"
+			includeantruntime="false"
+			debug="true">
+			<classpath refid="build.classpath" />
+		</javac>
+
+		<!-- jarタスクによってaarファイルを作成 -->
+		<jar destfile="${service.name}.aar" basedir="${dest}" />
+
+	</target>
+
+	<!-- tomcatへデプロイ -->
+	<target name="deploy" depends="generate.service">
+		<!-- サーバサイドをaxis2へコピー -->
+		<copy file="${service.name}.aar" tofile="${axis2.home}/${service.name}.aar" />
+
+		<!-- クライアントサイドをtomcatへコピー -->
+		<copy todir="${tomcat.home}/${service.name}" overwrite="true">
+			<fileset dir="WebContent" />
+		</copy>
+	</target>
+
+</project>
