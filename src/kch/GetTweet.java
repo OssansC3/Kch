@@ -11,14 +11,14 @@ import java.util.List;
  * @author shin
  *
  */
-public class GetTweeet {
+public class GetTweet {
 
 	// ユーザアカウントを管理するクラス
 	private UserManager manager;
 
 	// コンストラクタ
 	// tomcat起動時に一度だけ実行される
-	public GetTweeet() {
+	public GetTweet() {
 		manager = new UserManager();
 	}
 
