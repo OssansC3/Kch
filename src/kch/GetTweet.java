@@ -1,60 +1,33 @@
 package kch;
 
 import java.util.List;
+import twitter4j.*;
 
 /**
- * REST APIから呼び出せるサービスインタフェースクラス
- * ロジックを持たない単なるラッパークラス，Axis2専用の皮
+ * ついーとを取得する
  *
- * 当該クラス名を変更する場合はservices.xmlのL8を書き換えること
- *
- * @author shin
+ * @author 2014004 高　良多朗
  *
  */
 public class GetTweet {
 
-	// ユーザアカウントを管理するクラス
-	private UserManager manager;
-
-	// コンストラクタ
-	// tomcat起動時に一度だけ実行される
-	public GetTweet() {
-		manager = new UserManager();
-	}
-
 	/**
-	 * ■ デモAPI1
-	 * 足し算API
-	 * 2つのint型のパラメタを受け取り，int型を返すだけ
-	 *
-	 * @param p1
-	 * @param p2
-	 * @return
+	 * ツイート内容を取得するapi
+	 * @param アドレス
+	 * @return ツイート内容
 	 */
-	public int plus (int p1, int p2) {
-		return p1 + p2;
-	}
+	public void getTweet() {
+		try{
+			Twitter twitter = new TwitterFactory().getInstance();
+			User user = twitter.verifyCredentials();
+			List<Status> statues = twitter.getHomeTimeline();
+			System.out.println("show @"+user.getScreenName()+" shows");
+			for (Status status:statues) {
+			System.out.println("@"+status.getUser().getScreenName()+":"+status.getText());
+			}
+			} catch (TwitterException e) {
+			e.printStackTrace();
+			System.out.println(""+e.getMessage());
+		}	}
 
-	/**
-	 * ■ デモAPI2
-	 * ユーザアカウントを登録するAPI
-	 *
-	 * @param name
-	 * @param pass
-	 * @return 登録の可否 （デモなので書式/重複チェックなし，全部true）
-	 */
-	public boolean createUser(String name, String pass) {
-		return manager.createUser(name, pass);
-	}
-
-	/**
-	 * ■ デモAPI3
-	 * ユーザ一覧を取得するAPI
-	 * オブジェクトを返すデモ
-	 *
-	 * @return ユーザリスト
-	 */
-	public List<User> getAllUsers() {
-		return manager.getAllUsers();
-	}
 }
