@@ -37,7 +37,7 @@ public class GetTweet {
 	 * @param アドレス
 	 * @return ツイート内容
 	 */
-	public String getTweet(String userId) {
+	public int getTweet(String userId) {
 		File outFile = new File("tweet.txt");
 		try{
 			FileWriter out = new FileWriter(outFile);
@@ -47,13 +47,13 @@ public class GetTweet {
 				out.write(format(status.getText())+"\n");
 			}
 			out.close();
-			return "done.";
+			return 0;
 		} catch(TwitterException e){
-			System.err.println("TwitterAPIError:"+e);
-			return "TwitterAPIError:"+e;
+			System.err.println("TwitterAPIError:"+e.getMessage());
+			return 1;
 		} catch (IOException e) {
-			System.err.println("FileOutputError:"+e);
-			return "FileOutputError:"+e;
+			System.err.println("FileOutputError:"+e.getMessage());
+			return 2;
 		}
 	}
 
