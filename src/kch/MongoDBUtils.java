@@ -17,8 +17,8 @@ import com.mongodb.MongoException;
 public class MongoDBUtils {
 	private static Mongo m;
 	private static DB db;
-	private final String dbName = "kch";
-	private final String DB_ACCOUNT_COLLECTION = "account";
+	private static final String dbName = "kch";
+	private static final String DB_ACCOUNT_COLLECTION = "account";
 	private static MongoDBUtils singleton = new MongoDBUtils();
 
 	/**
