@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import twitter4j.*;
 
@@ -14,16 +15,24 @@ import twitter4j.*;
  *
  */
 public class GetTweet {
+	private Twitter twitter;
+	private Logger logger;
+
+	public GetTweet() {
+		twitter = TwitterUtils.getInstance().getTwitterInstance();
+		logger = Logger.getLogger(getClass().getName());
+	}
 	/**
 	 * ツイート内容を取得するapi
 	 * @param アドレス
 	 * @return ツイート内容
 	 */
 	public int getTweet(String userId) {
+		logger.info("GetTweet.getTweet");
+
 		File outFile = new File("tweet.txt");
 		try{
 			FileWriter out = new FileWriter(outFile);
-			Twitter twitter = TwitterUtils.getInstance().getTwitterInstance();
 			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,10));
 			for(Status status:statusList){
 				out.write(format(status.getText())+"\n");
@@ -31,10 +40,10 @@ public class GetTweet {
 			out.close();
 			return 0;
 		} catch(TwitterException e){
-			System.err.println("TwitterAPIError:"+e.getMessage());
+			logger.severe(e.getMessage());
 			return 1;
 		} catch (IOException e) {
-			System.err.println("FileOutputError:"+e.getMessage());
+			logger.severe(e.getMessage());
 			return 2;
 		}
 	}
