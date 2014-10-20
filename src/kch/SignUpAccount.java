@@ -39,6 +39,7 @@ public class SignUpAccount {
 	 */
 	public int registerAccount(String userId) throws Exception{
 		logger.info("SignUpAccount.registerAccount");
+		userId = MongoDBUtils.sanitize(userId);
 
 		if(!isUniqueName(userId)){
 			logger.warning("SignUpAccount.registerAccount:"+userId+" has already registered.");
@@ -78,10 +79,10 @@ public class SignUpAccount {
 	}
 
 	/**
-	 * ユーザーIDの重複チェック
+	 * ユーザーIDがTwitterに存在するかをチェック
 	 * @param userId ユーザーID
-	 * @return 登録済みならfalse,そうでないならtrue
-	 * @throws MongoException
+	 * @return ユーザーが存在するならtrue,存在しないならfalse
+	 * @throws TwitterException
 	 */
 	private boolean isExistingOnTwitter(String userId) throws TwitterException{
 		logger.info("SignUpAccount.isExistingOnTwitter");

@@ -29,7 +29,27 @@ public class TwitterUtils {
 		tf = new TwitterFactory(cb.build());
 	}
 
+	/**
+	 * ツイッターのインスタンスを呼び出す．
+	 * 普段はこれからAPIを呼ぶべし
+
+	 * @return ツイッターのインスタンスオブジェクト
+	 */
 	public Twitter getTwitterInstance(){
 		return tf.getInstance();
 	}
+
+	public static String sanitize(String str){
+		if (str == null) return "";
+		str = str.replaceAll(" ", "");
+		str = str.replaceAll("\n", "");
+		str = str.replaceAll("\t", "");
+		str = str.replaceAll("&","&amp;");
+		str = str.replaceAll("<","&lt;");
+		str = str.replaceAll(">","&gt;");
+		str = str.replaceAll("\"","&quot;");
+		str = str.replaceAll("'","&#39;");
+		return str;
+	}
+
 }

@@ -25,17 +25,21 @@ public class GetTweet {
 	}
 	/**
 	 * ツイート内容を取得する．<br/>
-	 * ツイッター例外が帰った場合は空リストを返す．
+	 * 取得した内容はリストにして返す．<br/>
+	 * アカウントが登録されていない，または指定したアカウントが一度もつぶやいていない場合は空リストを返す．
+	 *
 	 * @param アドレス
 	 * @return ツイート内容のリスト．例外の場合は空リスト．
 	 */
 	public List<String> getTweet(String userId) {
 		logger.info("GetTweet.getTweet");
+		userId = MongoDBUtils.sanitize(userId);
+
 		List<String> tweetList = new ArrayList<String>();
 		try{
 			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,10));
 			for(Status status:statusList){
-				tweetList.add(format(status.getText()));
+				tweetList.add(TwitterUtils.sanitize(status.getText()));
 			}
 			return tweetList;
 		} catch(TwitterException e){
@@ -44,7 +48,4 @@ public class GetTweet {
 		}
 	}
 
-	private String format(String str){
-		return str.replaceAll(" ", "").replaceAll("\n", "").replaceAll("\t", "");
-	}
 }

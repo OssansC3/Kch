@@ -26,6 +26,8 @@ public class GetScore {
 
 	public void getScore(String userId,List<String> tweetList){
 		logger.info("GetScore.getScore");
+		userId = MongoDBUtils.sanitize(userId);
+
 		List<Integer> scoreList = new ArrayList<Integer>();
 
 		for(String tweet:tweetList){
