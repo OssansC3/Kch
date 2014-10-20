@@ -1,12 +1,13 @@
 package kch;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import twitter4j.*;
+import twitter4j.Paging;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 /**
  * ついーとを取得する
@@ -23,28 +24,23 @@ public class GetTweet {
 		logger = Logger.getLogger(getClass().getName());
 	}
 	/**
-	 * ツイート内容を取得するapi
+	 * ツイート内容を取得する．<br/>
+	 * ツイッター例外が帰った場合は空リストを返す．
 	 * @param アドレス
-	 * @return ツイート内容
+	 * @return ツイート内容のリスト．例外の場合は空リスト．
 	 */
-	public int getTweet(String userId) {
+	public List<String> getTweet(String userId) {
 		logger.info("GetTweet.getTweet");
-
-		File outFile = new File("tweet.txt");
+		List<String> tweetList = new ArrayList<String>();
 		try{
-			FileWriter out = new FileWriter(outFile);
 			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,10));
 			for(Status status:statusList){
-				out.write(format(status.getText())+"\n");
+				tweetList.add(format(status.getText()));
 			}
-			out.close();
-			return 0;
+			return tweetList;
 		} catch(TwitterException e){
 			logger.severe(e.getMessage());
-			return 1;
-		} catch (IOException e) {
-			logger.severe(e.getMessage());
-			return 2;
+			return new ArrayList<String>();
 		}
 	}
 
