@@ -53,4 +53,12 @@ public class AccountModel {
 		logger.info("AccountModel.registerScore");
 
 	}
+
+	/**
+	 * DBからスコアを取得する．
+	 */
+	public void getScore(){
+		logger.info("AccountModel.getScore");
+
+	}
 }

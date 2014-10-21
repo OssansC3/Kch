@@ -14,10 +14,10 @@ import com.mongodb.MongoException;
  * @author 2014004
  *
  */
-public class SignUpAccount {
+public class SignUpController {
 	private Logger logger;
 
-	public SignUpAccount() {
+	public SignUpController() {
 		logger = Logger.getLogger(getClass().getName());
 	}
 
@@ -33,18 +33,18 @@ public class SignUpAccount {
 	 * @throws Exception
 	 */
 	public int registerAccount(String userId) throws Exception{
-		logger.info("SignUpAccount.registerAccount");
+		logger.info("SignUpController.registerAccount");
 		userId = MongoDBUtils.sanitize(userId);
 
 		AccountModel am = new AccountModel(userId);
 
 		if(am.isRegistered()){
-			logger.warning("SignUpAccount.registerAccount:"+userId+" has already registered.");
+			logger.warning("SignUpController.registerAccount:"+userId+" has already registered.");
 			return 1;
 		}
 
 		if(!isExistingOnTwitter(userId)){
-			logger.warning("SignUpAccount.registerAccount:"+userId+" doesn't exist on Twitter.");
+			logger.warning("SignUpController.registerAccount:"+userId+" doesn't exist on Twitter.");
 			return 2;
 		}
 
@@ -64,8 +64,6 @@ public class SignUpAccount {
 	 * @throws TwitterException
 	 */
 	private boolean isExistingOnTwitter(String userId) throws TwitterException{
-		logger.info("SignUpAccount.isExistingOnTwitter");
-
 		try{
 			Twitter twitter = TwitterUtils.getInstance().getTwitterInstance();
 			User user = twitter.showUser(userId);
