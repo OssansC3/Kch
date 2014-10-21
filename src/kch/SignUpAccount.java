@@ -6,9 +6,6 @@ import twitter4j.User;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoException;
 
 /**
@@ -18,11 +15,9 @@ import com.mongodb.MongoException;
  *
  */
 public class SignUpAccount {
-	private DBCollection coll;
 	private Logger logger;
 
 	public SignUpAccount() {
-		coll = MongoDBUtils.getInstance().getAccountCollection();
 		logger = Logger.getLogger(getClass().getName());
 	}
 
@@ -41,7 +36,9 @@ public class SignUpAccount {
 		logger.info("SignUpAccount.registerAccount");
 		userId = MongoDBUtils.sanitize(userId);
 
-		if(!isUniqueName(userId)){
+		AccountModel am = new AccountModel(userId);
+
+		if(am.isRegistered()){
 			logger.warning("SignUpAccount.registerAccount:"+userId+" has already registered.");
 			return 1;
 		}
@@ -50,32 +47,14 @@ public class SignUpAccount {
 			logger.warning("SignUpAccount.registerAccount:"+userId+" doesn't exist on Twitter.");
 			return 2;
 		}
+
 		try{
-			coll.insert(new BasicDBObject("userId",userId));
+			am.registerAccount();
 			return 0;
 		} catch(MongoException e){
 			logger.severe(e.getMessage());
 			return 3;
 		}
-	}
-
-	/**
-	 * ユーザーIDの重複チェック
-	 * @param userId ユーザーID
-	 * @return 登録済みならfalse,そうでないならtrue
-	 * @throws MongoException
-	 */
-	private boolean isUniqueName(String userId) throws MongoException{
-		logger.info("SignUpAccount.isUniqueName");
-
-		DBObject query = new BasicDBObject("userId",userId);
-		try{
-			if(coll.findOne(query) != null) return false;
-		} catch(MongoException e){
-			logger.severe(e.getMessage());
-			throw e;
-		}
-		return true;
 	}
 
 	/**
