@@ -1,5 +1,7 @@
 package kch;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,8 +37,10 @@ public class PageGenController {
 	 * </ol>
 	 *
 	 * @param userId ツイートを取得するユーザー名
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
 	 */
-	public void execute(String userId){
+	public void execute(String userId) throws UnsupportedEncodingException, IOException{
 		logger.info("PageGenController.execute");
 		userId = MongoDBUtils.sanitize(userId);
 
