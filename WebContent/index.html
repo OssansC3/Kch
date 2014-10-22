@@ -3,17 +3,21 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Axis2Demo</title>
+		<title>K-ch</title>
 	</head>
 
 	<body>
-		<input id="p1" type="text">
-		<input id="p2" type="text">
-		<input id="plus" type="submit">
-		<input id="ans" type="text">
+		<input id="input" type="text">
+		<input id="load" type="submit" value="読み込む">
 
-		<script src="js/jquery-2.1.1.min.js"></script>
-		<script src="js/demo.js"></script>
-    </body>
+		<h2><a href="signup.html">アカウントを作成する人はこちら</a></h2>
+		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript">
+			$('#load').click(function() {
+				var load = $('#input').val();
+				location.href='kch.html?userId='+load;
+			});
+		</script>
+	</body>
 
 </html>

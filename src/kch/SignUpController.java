@@ -6,9 +6,6 @@ import twitter4j.User;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoException;
 
 /**
@@ -17,12 +14,10 @@ import com.mongodb.MongoException;
  * @author 2014004
  *
  */
-public class SignUpAccount {
-	private DBCollection coll;
+public class SignUpController {
 	private Logger logger;
 
-	public SignUpAccount() {
-		coll = MongoDBUtils.getInstance().getAccountCollection();
+	public SignUpController() {
 		logger = Logger.getLogger(getClass().getName());
 	}
 
@@ -38,44 +33,28 @@ public class SignUpAccount {
 	 * @throws Exception
 	 */
 	public int registerAccount(String userId) throws Exception{
-		logger.info("SignUpAccount.registerAccount");
+		logger.info("SignUpController.registerAccount");
 		userId = MongoDBUtils.sanitize(userId);
 
-		if(!isUniqueName(userId)){
-			logger.warning("SignUpAccount.registerAccount:"+userId+" has already registered.");
+		AccountModel am = new AccountModel(userId);
+
+		if(am.isRegistered()){
+			logger.warning("SignUpController.registerAccount:"+userId+" has already registered.");
 			return 1;
 		}
 
 		if(!isExistingOnTwitter(userId)){
-			logger.warning("SignUpAccount.registerAccount:"+userId+" doesn't exist on Twitter.");
+			logger.warning("SignUpController.registerAccount:"+userId+" doesn't exist on Twitter.");
 			return 2;
 		}
+
 		try{
-			coll.insert(new BasicDBObject("userId",userId));
+			am.registerAccount();
 			return 0;
 		} catch(MongoException e){
 			logger.severe(e.getMessage());
 			return 3;
 		}
-	}
-
-	/**
-	 * ユーザーIDの重複チェック
-	 * @param userId ユーザーID
-	 * @return 登録済みならfalse,そうでないならtrue
-	 * @throws MongoException
-	 */
-	private boolean isUniqueName(String userId) throws MongoException{
-		logger.info("SignUpAccount.isUniqueName");
-
-		DBObject query = new BasicDBObject("userId",userId);
-		try{
-			if(coll.findOne(query) != null) return false;
-		} catch(MongoException e){
-			logger.severe(e.getMessage());
-			throw e;
-		}
-		return true;
 	}
 
 	/**
@@ -85,8 +64,6 @@ public class SignUpAccount {
 	 * @throws TwitterException
 	 */
 	private boolean isExistingOnTwitter(String userId) throws TwitterException{
-		logger.info("SignUpAccount.isExistingOnTwitter");
-
 		try{
 			Twitter twitter = TwitterUtils.getInstance().getTwitterInstance();
 			User user = twitter.showUser(userId);
