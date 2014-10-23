@@ -72,7 +72,7 @@ public class JSONObjectT {
 				}else if(name.equals("likedislike")) {
 					//出身地
 					this.setLikeDislike(Integer.parseInt(parser.getText()));
-				}else if(name.equals("text")) {
+				}else if(name.equals("analyzed_text")) {
 					//詳細情報
 					this.setText(parser.getText());
 				} else {

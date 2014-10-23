@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 /**
  * 取得したツイートを感情解析APIに投げてスコアを取得，
@@ -56,12 +58,10 @@ public class GetScore {
 			total_score += score;
 		}
 
-		/*
 		DBObject updateScore = new BasicDBObject("score",scoreList.toArray());
 		DBObject update = new BasicDBObject("$set",updateScore);
 		DBObject query = new BasicDBObject("userId",userId);
 		coll.update(query, update);
-		*/
 
 		//合計値を返す
 		return total_score;
