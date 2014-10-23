@@ -49,16 +49,22 @@ public class AccountModel {
 	/**
 	 * 取得したスコアをDBに登録する．
 	 */
-	public void registerScore(){
+	public void registerScore(int score){
 		logger.info("AccountModel.registerScore");
-
+		this.isRegistered();
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		object.put("score", score);
+		
 	}
 
 	/**
 	 * DBからスコアを取得する．
 	 */
-	public void getScore(){
+	public int getScore(){
 		logger.info("AccountModel.getScore");
-
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return Integer.parseInt(object.get("score").toString());
 	}
 }
