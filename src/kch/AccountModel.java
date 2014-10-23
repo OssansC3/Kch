@@ -70,12 +70,10 @@ public class AccountModel {
 		logger.info("AccountModel.getScore");
 		try{
 			this.isRegistered();
-
 		}
 		catch(MongoException e){
 			throw e;
 		}
-		registerScore(30);
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
 		return  (int)object.get("score");
