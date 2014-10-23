@@ -2,10 +2,13 @@ package kch;
 
 import java.util.logging.Logger;
 
+import org.bson.BasicBSONObject;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoException;
+import com.mongodb.util.JSON;
 
 public class AccountModel {
 	private DBCollection coll;
@@ -29,6 +32,7 @@ public class AccountModel {
 		logger.info("AccountModel.isRegistered");
 		DBObject query = new BasicDBObject("userId",userId);
 
+
 		try{
 			if(coll.findOne(query) == null) return false;
 		} catch(MongoException e){
@@ -44,6 +48,7 @@ public class AccountModel {
 	public void registerAccount(){
 		logger.info("AccountModel.registerAccount");
 		coll.insert(new BasicDBObject("userId",userId));
+		coll.insert(new BasicDBObject("score","0"));
 	}
 
 	/**
@@ -55,16 +60,24 @@ public class AccountModel {
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
 		object.put("score", score);
-		
+		coll.save(object);
 	}
 
 	/**
 	 * DBからスコアを取得する．
 	 */
-	public int getScore(){
+	public int getScore() throws MongoException{
 		logger.info("AccountModel.getScore");
+		try{
+			this.isRegistered();
+
+		}
+		catch(MongoException e){
+			throw e;
+		}
+		registerScore(30);
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
-		return Integer.parseInt(object.get("score").toString());
+		return  (int)object.get("score");
 	}
 }
