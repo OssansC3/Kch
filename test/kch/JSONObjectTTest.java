@@ -60,6 +60,7 @@ public class JSONObjectTTest {
 		String url = "http://ap.mextractr.net/ma9/emotion_analyzer?out=json&apikey="+apikey+"&text="+encText1;
 		JSONObjectT jso = new JSONObjectT();
 		jso.setJson(url);
+		@SuppressWarnings("unused")
 		String tweet = "Gレコは冨野xガンダムという事で見てて、まだ何とも言えないんだけど、ワクワクしないんだよなぁ。まだ過小評価されてるAGEのが面白い気がすんだけど。確かに酷い演出とか突っ込みどころもあるがAGEは過小評価され過ぎな気がするし最後まで見てほしいところ...。";
 		System.out.println(jso.getText());
 		//assertEquals( tweet, jso.getText());

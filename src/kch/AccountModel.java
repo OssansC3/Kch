@@ -2,13 +2,10 @@ package kch;
 
 import java.util.logging.Logger;
 
-import org.bson.BasicBSONObject;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoException;
-import com.mongodb.util.JSON;
 
 public class AccountModel {
 	private DBCollection coll;

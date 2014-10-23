@@ -33,7 +33,7 @@ public class GetKchService {
 			return GREEN_IMAGE_URI;
 		}
 
-		return ERROR_IMAGE_URI;
+		return YELLOW_IMAGE_URI;
 	}
 
 }
