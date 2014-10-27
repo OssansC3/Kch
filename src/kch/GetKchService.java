@@ -3,10 +3,11 @@ package kch;
 import com.mongodb.MongoException;
 
 public class GetKchService {
-	private String ERROR_IMAGE_URI="error";
-	private String GREEN_IMAGE_URI="green";
-	private String YELLOW_IMAGE_URI="yellow";
-	private String RED_IMAGE_URI="red";
+	//暫定的に画像パスを設定
+	private String ERROR_IMAGE_URI="/images/error.jpg";
+	private String GREEN_IMAGE_URI="/images/green.jpg";
+	private String YELLOW_IMAGE_URI="/images/yellow.jpg";
+	private String RED_IMAGE_URI="/images/red.jpg";
 
 	public GetKchService(){
 	}
@@ -29,11 +30,15 @@ public class GetKchService {
 
 		//scoreから3段階評価への対応をとり、URIを投げる
 		//現状適当
-		if(score > 20){
+		if(score > 70){
 			return GREEN_IMAGE_URI;
 		}
-
-		return YELLOW_IMAGE_URI;
+		else if (score > 30){
+			return YELLOW_IMAGE_URI;
+		}
+		else{
+			return RED_IMAGE_URI;
+		}
 	}
 
 }
