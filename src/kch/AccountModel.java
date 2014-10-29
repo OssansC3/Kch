@@ -74,7 +74,7 @@ public class AccountModel {
 		}
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
-		return  (int)object.get("score");
+		return  (int)object.get("totalScore");
 	}
 
 	public void setScore(int totalScore,List<Integer> scoreList) throws MongoException{
