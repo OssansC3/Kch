@@ -37,6 +37,7 @@ public class SignUpController {
 		userId = MongoDBUtils.sanitize(userId);
 
 		AccountModel am = new AccountModel(userId);
+		QueModel qm = new QueModel();
 
 		if(am.isRegistered()){
 			logger.warning("SignUpController.registerAccount:"+userId+" has already registered.");
@@ -50,6 +51,7 @@ public class SignUpController {
 
 		try{
 			am.registerAccount();
+			qm.insertDate(userId);
 			return 0;
 		} catch(MongoException e){
 			logger.severe(e.getMessage());

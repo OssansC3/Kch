@@ -19,6 +19,7 @@ public class MongoDBUtils {
 	private static DB db;
 	private static final String dbName = "kch";
 	private static final String DB_ACCOUNT_COLLECTION = "account";
+	private static final String DB_QUE_COLLECTION = "que";
 	private static MongoDBUtils singleton = new MongoDBUtils();
 
 	/**
@@ -66,7 +67,19 @@ public class MongoDBUtils {
 		return str;
 	}
 
+	/**
+	 * Accountコレクションの取得．
+	 * @return Accountコレクション
+	 */
 	public DBCollection getAccountCollection(){
 		return db.getCollection(DB_ACCOUNT_COLLECTION);
+	}
+
+	/**
+	 * Queコレクションの取得．
+	 * @return Queコレクション
+	 */
+	public DBCollection getQueCollection(){
+		return db.getCollection(DB_QUE_COLLECTION);
 	}
 }
