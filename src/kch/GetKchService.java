@@ -1,5 +1,7 @@
 package kch;
 
+import java.util.logging.Logger;
+
 import com.mongodb.MongoException;
 
 public class GetKchService {
@@ -8,11 +10,14 @@ public class GetKchService {
 	private String GREEN_IMAGE_URI="/images/green.jpg";
 	private String YELLOW_IMAGE_URI="/images/yellow.jpg";
 	private String RED_IMAGE_URI="/images/red.jpg";
+	private Logger logger;
 
 	public GetKchService(){
+		logger = Logger.getLogger(getClass().getName());
 	}
 
 	public String GetKchImageURI(String userId){
+		logger.info("GetKchService.getKchImageURI");
 		if(userId==null){
 			return "null";
 		}
@@ -23,7 +28,7 @@ public class GetKchService {
 		}
 		int score = 0;
 		try{
-			score = account.getScore(userId);
+			score = account.getTotalScore(userId);
 		}
 		catch(MongoException e){
 			return RED_IMAGE_URI;

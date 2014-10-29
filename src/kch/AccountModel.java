@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -31,7 +32,6 @@ public class AccountModel {
 		logger.info("AccountModel.isRegistered");
 		DBObject query = new BasicDBObject("userId",userId);
 
-
 		try{
 			if(coll.findOne(query) == null) return false;
 		} catch(MongoException e){
@@ -43,32 +43,28 @@ public class AccountModel {
 
 	/**
 	 * 取得したユーザーIDをDBに登録する．
+	 * @param userId 登録するユーザー
 	 */
 	public void registerAccount(String userId){
 		logger.info("AccountModel.registerAccount");
-		coll.insert(new BasicDBObject("userId",userId));
-		coll.insert(new BasicDBObject("score","0"));
+		DBObject user = new BasicDBObject();
+		user.put("userId",userId);
+		user.put("totalScore",0);
+		user.put("score",newScore());
+		user.put("date",newDate());
+		coll.insert(user);
 	}
 
 	/**
-	 * 取得したスコアをDBに登録する．
+	 * DBから合計スコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return 合計スコア
 	 */
-	public void registerScore(String userId,int score){
-		logger.info("AccountModel.registerScore");
-		this.isRegistered(userId);
-		DBObject query = new BasicDBObject("userId",userId);
-		DBObject object = coll.findOne(query);
-		object.put("score", score);
-		coll.save(object);
-	}
-
-	/**
-	 * DBからスコアを取得する．
-	 */
-	public int getScore(String userId) throws MongoException{
-		logger.info("AccountModel.getScore");
+	public int getTotalScore(String userId) throws MongoException{
+		logger.info("AccountModel.getTotalScore");
 		try{
-			this.isRegistered(userId);
+			if(!this.isRegistered(userId)) return 0;
 		}
 		catch(MongoException e){
 			throw e;
@@ -78,6 +74,32 @@ public class AccountModel {
 		return  (int)object.get("totalScore");
 	}
 
+	/**
+	 * DBからスコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return スコア配列
+	 */
+	public BasicDBList getScore(String userId) throws MongoException{
+		logger.info("AccountModel.getScore");
+		try{
+			if(!this.isRegistered(userId)) return new BasicDBList();
+		} catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (BasicDBList)object.get("score");
+	}
+
+	/**
+	 * 取得したスコアでDBを更新する．
+	 *
+	 * @param userId 更新するユーザー
+	 * @param totalScore スコアの合計
+	 * @param scoreList スコアの配列
+	 * @throws MongoException
+	 */
 	public void setScore(String userId,int totalScore,List<Integer> scoreList) throws MongoException{
 		logger.info("AccountModel.setScore");
 
@@ -114,16 +136,17 @@ public class AccountModel {
 	}
 
 	/**
-	 * DBに新しいユーザーのキューを登録する．
+	 * DBに新しく登録するユーザーのキューを設定する．
 	 * <ol>
 	 * <li>スコアを処理していないユーザーでもっとも最後に登録された時刻を取得する．</li>
 	 * <li>取得した時刻に1秒を追加したものを追加するユーザーの時刻に設定する．</li>
-	 * <li>登録するユーザーをDBに登録する．</li>
+	 * <li>未処理ユーザーが存在しない場合はDate(0)に設定する．</li>
+	 * <li>設定した時刻を返す．</li>
 	 * </ol>
 	 * @param userId 登録するユーザー
+	 * @return 新しいデート
 	 */
-	public void insertDate(String userId){
-		logger.info("AccountModel.insertDate");
+	private Date newDate(){
 		DBObject query = new BasicDBObject("date",new BasicDBObject("$lt",new Date(10000000)));
 		DBCursor cursor = coll.find(query).sort(new BasicDBObject("date",-1));
 
@@ -135,11 +158,19 @@ public class AccountModel {
 			date = new Date(0);
 		}
 
-		DBObject newUser = new BasicDBObject();
-		newUser.put("userId", userId);
-		newUser.put("date",date);
+		return date;
 	}
 
+	/**
+	 * 0だけ入ったリストを返す．
+	 * 正直作るほどのメソッドではないけど一応追加
+	 * @return 0が一つだけ入った配列
+	 */
+	private BasicDBList newScore(){
+		BasicDBList list = new BasicDBList();
+		list.add(0);
+		return list;
+	}
 	/**
 	 * ユーザーの更新時間を更新する．
 	 * <ol>

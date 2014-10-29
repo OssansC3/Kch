@@ -50,7 +50,6 @@ public class SignUpController {
 
 		try{
 			am.registerAccount(userId);
-			am.insertDate(userId);
 			return 0;
 		} catch(MongoException e){
 			logger.severe(e.getMessage());
