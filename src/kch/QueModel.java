@@ -52,6 +52,7 @@ public class QueModel {
 	 * @param date 更新する時間
 	 */
 	public void updateDate(String userId,Date date){
+		logger.info("QueModel.updateDate");
 		DBObject qUser = new BasicDBObject("userId",userId);
 		DBObject qDate = new BasicDBObject("$set",new BasicDBObject("date",date));
 
@@ -68,6 +69,7 @@ public class QueModel {
 	 * @param userId 登録するユーザー
 	 */
 	public void insertDate(String userId){
+		logger.info("QueModel.insertDate");
 		DBObject query = new BasicDBObject("date",new BasicDBObject("$lt",new Date(10000000)));
 		DBCursor cursor = coll.find(query).sort(new BasicDBObject("date",-1));
 
