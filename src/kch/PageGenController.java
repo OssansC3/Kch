@@ -30,7 +30,7 @@ public class PageGenController {
 	 */
 	public void execute(){
 		logger.info("PageGenController.execute");
-		QueModel qm = new QueModel();
+		AccountModel qm = new AccountModel();
 		List<DBObject> oldList = qm.getOldList(9);
 
 		//更新順を保持するための値
@@ -72,12 +72,11 @@ public class PageGenController {
 	 * @throws UnsupportedEncodingException
 	 */
 	private void generate(String userId) throws UnsupportedEncodingException, IOException{
-		userId = MongoDBUtils.sanitize(userId);
-		AccountModel am = new AccountModel(userId);
+		AccountModel am = new AccountModel();
 		GetTweet gt = new GetTweet();
 		GetScore gs = new GetScore();
 
-		if(!am.isRegistered()){
+		if(!am.isRegistered(userId)){
 			logger.warning("アカウント"+userId+"は登録されていません。");
 			return;
 		}

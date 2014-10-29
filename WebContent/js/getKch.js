@@ -1,4 +1,4 @@
-var endpoint = 'http://localhost:8080/axis2/services/GetKchService';
+var endpoint = 'axis2/services/GetKchService';
 
 $(function() {
 	var userId = getUrlVars()["userId"];

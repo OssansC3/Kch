@@ -1,4 +1,4 @@
-var endpoint = 'http://localhost:8080/axis2/services/SignUpController';
+var endpoint = 'axis2/services/SignUpController';
 
 $('#signup').click(function() {
 	var userId = $('#userId').val();

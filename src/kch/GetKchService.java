@@ -14,15 +14,16 @@ public class GetKchService {
 
 	public String GetKchImageURI(String userId){
 		if(userId==null){
-			return "nullらしい";
+			return "null";
 		}
-		AccountModel account = new AccountModel(userId);
-		if(!account.isRegistered()){
+		userId = MongoDBUtils.sanitize(userId);
+		AccountModel account = new AccountModel();
+		if(!account.isRegistered(userId)){
 			return ERROR_IMAGE_URI;
 		}
 		int score = 0;
 		try{
-			score = account.getScore();
+			score = account.getScore(userId);
 		}
 		catch(MongoException e){
 			return RED_IMAGE_URI;

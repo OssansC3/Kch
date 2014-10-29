@@ -23,15 +23,12 @@ public class GetScore {
 	}
 
 	public int getScore(String userId,List<String> tweetList) throws UnsupportedEncodingException, IOException{
-		AccountModel am = new AccountModel(userId);
+		AccountModel am = new AccountModel();
 		logger.info("GetScore.getScore");
 		userId = MongoDBUtils.sanitize(userId);
 
 		List<Integer> scoreList= new ArrayList<Integer>();
 		for(String tweet:tweetList){
-			//TODO:感情解析APIに投げる
-			//現状はとりあえず感情1を投げる
-
 			tweet = tweet+"";//警告消し
 
 			//TweetListをUTF-8エンコード
@@ -53,7 +50,7 @@ public class GetScore {
 			total_score += score;
 		}
 
-		am.setScore(total_score, scoreList);
+		am.setScore(userId,total_score, scoreList);
 		/*
 		DBObject updateScore = new BasicDBObject("score",scoreList.toArray());
 		DBObject update = new BasicDBObject("$set",updateScore);
