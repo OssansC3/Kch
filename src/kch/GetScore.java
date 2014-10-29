@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-
 /**
  * 取得したツイートを感情解析APIに投げてスコアを取得，
  * 取得したスコアをデータベースに登録する．
@@ -19,16 +15,15 @@ import com.mongodb.DBObject;
  */
 
 public class GetScore {
-	private DBCollection coll;
 	private Logger logger;
 	private String apikey= "ADFAAD4575EAF50C9A4B19708C8C1BAD27170112"; //感情解析APIを使用するためのAPIKEY
 
 	public GetScore() {
-		coll = MongoDBUtils.getInstance().getAccountCollection();
 		logger = Logger.getLogger(getClass().getName());
 	}
 
 	public int getScore(String userId,List<String> tweetList) throws UnsupportedEncodingException, IOException{
+		AccountModel am = new AccountModel(userId);
 		logger.info("GetScore.getScore");
 		userId = MongoDBUtils.sanitize(userId);
 
@@ -58,10 +53,13 @@ public class GetScore {
 			total_score += score;
 		}
 
+		am.setScore(total_score, scoreList);
+		/*
 		DBObject updateScore = new BasicDBObject("score",scoreList.toArray());
 		DBObject update = new BasicDBObject("$set",updateScore);
 		DBObject query = new BasicDBObject("userId",userId);
 		coll.update(query, update);
+		*/
 
 		//合計値を返す
 		return total_score;

@@ -1,5 +1,6 @@
 package kch;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.mongodb.BasicDBObject;
@@ -74,5 +75,16 @@ public class AccountModel {
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
 		return  (int)object.get("score");
+	}
+
+	public void setScore(int totalScore,List<Integer> scoreList) throws MongoException{
+		logger.info("AccountModel.setScore");
+
+		DBObject qUser = new BasicDBObject("userId",userId);
+		DBObject qScore = new BasicDBObject("$set",new BasicDBObject("score",scoreList.toArray()));
+		DBObject qTotal = new BasicDBObject("$set",new BasicDBObject("totalScore",totalScore));
+
+		coll.update(qUser, qScore);
+		coll.update(qUser, qTotal);
 	}
 }
