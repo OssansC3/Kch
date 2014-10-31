@@ -23,7 +23,7 @@ public class TestSignUpController {
 		coll.drop();
 		SignUpController sua = new SignUpController();
 		int expected = 0;
-		int actual = sua.registerAccount("ossansC3");
+		int actual = sua.execute("ossansC3");
 		assertEquals(expected,actual);
 	}
 
@@ -39,7 +39,7 @@ public class TestSignUpController {
 		coll.insert(new BasicDBObject("userId","ossansC3"));
 		SignUpController sua = new SignUpController();
 		int expected = 1;
-		int actual = sua.registerAccount("ossansC3");
+		int actual = sua.execute("ossansC3");
 		assertEquals(expected,actual);
 	}
 
@@ -54,7 +54,7 @@ public class TestSignUpController {
 		coll.drop();
 		SignUpController sua = new SignUpController();
 		int expected = 2;
-		int actual = sua.registerAccount("daffdafdaafdafdafadafdaffdaf");
+		int actual = sua.execute("daffdafdaafdafdafadafdaffdaf");
 		assertEquals(expected,actual);
 	}
 

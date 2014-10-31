@@ -35,8 +35,8 @@ public class SignUpController {
 	 * @return 終了状態，0は正常終了，1はDBｎｉ登録済み,2はツイッターに存在しない，3はMongoDBのエラー
 	 * @throws Exception
 	 */
-	public int registerAccount(String userId) throws Exception{
-		logger.info("SignUpController.registerAccount");
+	public int execute(String userId) throws Exception{
+		logger.info("SignUpController.execute");
 		userId = MongoDBUtils.sanitize(userId);
 
 		AccountModel am = new AccountModel();
