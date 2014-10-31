@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import kch.utils.Emotion;
 import kch.utils.MongoDBUtils;
 
 import com.mongodb.BasicDBList;
@@ -58,57 +59,25 @@ public class AccountModel {
 	}
 
 	/**
-	 * DBから合計スコアを取得する．
-	 *
-	 * @param userId 取得するユーザー
-	 * @return 合計スコア
-	 */
-	public int getTotalScore(String userId) throws MongoException{
-		logger.info("AccountModel.getTotalScore");
-		try{
-			if(!this.isRegistered(userId)) return 0;
-		}
-		catch(MongoException e){
-			throw e;
-		}
-		DBObject query = new BasicDBObject("userId",userId);
-		DBObject object = coll.findOne(query);
-		return  (int)object.get("totalScore");
-	}
-
-	/**
-	 * DBからスコアを取得する．
-	 *
-	 * @param userId 取得するユーザー
-	 * @return スコア配列
-	 */
-	public BasicDBList getScore(String userId) throws MongoException{
-		logger.info("AccountModel.getScore");
-		try{
-			if(!this.isRegistered(userId)) return new BasicDBList();
-		} catch(MongoException e){
-			throw e;
-		}
-		DBObject query = new BasicDBObject("userId",userId);
-		DBObject object = coll.findOne(query);
-		return  (BasicDBList)object.get("score");
-	}
-
-	/**
 	 * 取得したスコアでDBを更新する．
 	 *
 	 * @param userId 更新するユーザー
-	 * @param totalScore スコアの合計
-	 * @param scoreList スコアの配列
+	 * @param emotion 感情スコア
 	 * @throws MongoException
 	 */
-	public void setScore(String userId,int totalScore,List<Integer> scoreList) throws MongoException{
+	public void setScore(String userId,Emotion emotion) throws MongoException{
 		logger.info("AccountModel.setScore");
 
 		DBObject qUser = new BasicDBObject("userId",userId);
-		DBObject qScore = new BasicDBObject("$set",new BasicDBObject("score",scoreList.toArray()));
-		DBObject qTotal = new BasicDBObject("$set",new BasicDBObject("totalScore",totalScore));
+		DBObject qLike = new BasicDBObject("$set",new BasicDBObject("like",emotion.getLikeList().toArray()));
+		DBObject qJoy = new BasicDBObject("$set",new BasicDBObject("joy",emotion.getJoyList().toArray()));
+		DBObject qAnger = new BasicDBObject("$set",new BasicDBObject("anger",emotion.getAngerList().toArray()));
+		DBObject qScore = new BasicDBObject("$set",new BasicDBObject("score",emotion.getScoreList().toArray()));
+		DBObject qTotal = new BasicDBObject("$set",new BasicDBObject("totalScore",emotion.getTotalScore()));
 
+		coll.update(qUser, qLike);
+		coll.update(qUser, qJoy);
+		coll.update(qUser, qAnger);
 		coll.update(qUser, qScore);
 		coll.update(qUser, qTotal);
 	}
@@ -187,6 +156,97 @@ public class AccountModel {
 		DBObject qDate = new BasicDBObject("$set",new BasicDBObject("date",date));
 
 		coll.update(qUser, qDate);
+	}
+
+	/**
+	 * DBから合計スコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return 合計スコア
+	 */
+	public int getTotalScore(String userId) throws MongoException{
+		logger.info("AccountModel.getTotalScore");
+		try{
+			if(!this.isRegistered(userId)) return 0;
+		}
+		catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (int)object.get("totalScore");
+	}
+
+	/**
+	 * DBからスコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return スコア配列
+	 */
+	public BasicDBList getScoreList(String userId) throws MongoException{
+		logger.info("AccountModel.getScoreList");
+		try{
+			if(!this.isRegistered(userId)) return new BasicDBList();
+		} catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (BasicDBList)object.get("score");
+	}
+
+	/**
+	 * DBからlikeスコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return likeスコア配列
+	 */
+	public BasicDBList getLikeList(String userId) throws MongoException{
+		logger.info("AccountModel.getLikeList");
+		try{
+			if(!this.isRegistered(userId)) return new BasicDBList();
+		} catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (BasicDBList)object.get("like");
+	}
+
+	/**
+	 * DBからjoyスコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return joyスコア配列
+	 */
+	public BasicDBList getJoyList(String userId) throws MongoException{
+		logger.info("AccountModel.getJoyList");
+		try{
+			if(!this.isRegistered(userId)) return new BasicDBList();
+		} catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (BasicDBList)object.get("joy");
+	}
+
+	/**
+	 * DBからangerスコアを取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return angerスコア配列
+	 */
+	public BasicDBList getAngerList(String userId) throws MongoException{
+		logger.info("AccountModel.getAngerList");
+		try{
+			if(!this.isRegistered(userId)) return new BasicDBList();
+		} catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (BasicDBList)object.get("anger");
 	}
 
 }

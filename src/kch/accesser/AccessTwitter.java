@@ -1,4 +1,4 @@
-package kch;
+package kch.accesser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,11 @@ import twitter4j.TwitterException;
  * @author 2014004 高　良多朗
  *
  */
-public class GetTweet {
+public class AccessTwitter {
 	private Twitter twitter;
 	private Logger logger;
 
-	public GetTweet() {
+	public AccessTwitter() {
 		twitter = TwitterUtils.getInstance().getTwitterInstance();
 		logger = Logger.getLogger(getClass().getName());
 	}
@@ -33,8 +33,8 @@ public class GetTweet {
 	 * @param アドレス
 	 * @return ツイート内容のリスト．例外の場合は空リスト．
 	 */
-	public List<String> getTweet(String userId) {
-		logger.info("GetTweet.getTweet");
+	public List<String> getTweetList(String userId) {
+		logger.info("AccessTwitter.getTweetList");
 		userId = MongoDBUtils.sanitize(userId);
 
 		List<String> tweetList = new ArrayList<String>();

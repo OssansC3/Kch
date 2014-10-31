@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import kch.accesser.AccessTwitter;
+
 import org.junit.Test;
 public class TestGetTweet {
 
@@ -15,8 +17,8 @@ public class TestGetTweet {
 	 */
 	@Test
 	public void testGetTweet01() throws Exception{
-		GetTweet gt = new GetTweet();
-		List<String> list = gt.getTweet("cloud_spiral");
+		AccessTwitter gt = new AccessTwitter();
+		List<String> list = gt.getTweetList("cloud_spiral");
 
 		int expected = 10;
 		int actual = list.size();
@@ -31,8 +33,8 @@ public class TestGetTweet {
 	 */
 	@Test
 	public void testGetTweet02() throws Exception{
-		GetTweet gt = new GetTweet();
-		List<String> list = gt.getTweet("daffdafdaafdafdafadafdaffdaf");
+		AccessTwitter gt = new AccessTwitter();
+		List<String> list = gt.getTweetList("daffdafdaafdafdafadafdaffdaf");
 
 		int expected = 0;
 		int actual = list.size();
@@ -47,8 +49,8 @@ public class TestGetTweet {
 	 */
 	@Test
 	public void testGetTweet03() throws Exception{
-		GetTweet gt = new GetTweet();
-		List<String> list = gt.getTweet("Dummy");
+		AccessTwitter gt = new AccessTwitter();
+		List<String> list = gt.getTweetList("Dummy");
 
 		int expected = 0;
 		int actual = list.size();

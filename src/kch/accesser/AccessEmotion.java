@@ -1,4 +1,4 @@
-package kch;
+package kch.accesser;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import kch.model.AccountModel;
-import kch.utils.MongoDBUtils;
+import kch.utils.Emotion;
+import kch.utils.JSONObjectT;
 
 /**
  * 取得したツイートを感情解析APIに投げてスコアを取得，
@@ -17,20 +17,21 @@ import kch.utils.MongoDBUtils;
  *
  */
 
-public class GetScore {
+public class AccessEmotion {
 	private Logger logger;
 	private String apikey= "ADFAAD4575EAF50C9A4B19708C8C1BAD27170112"; //感情解析APIを使用するためのAPIKEY
 
-	public GetScore() {
+	public AccessEmotion() {
 		logger = Logger.getLogger(getClass().getName());
 	}
 
-	public int getScore(String userId,List<String> tweetList) throws UnsupportedEncodingException, IOException{
-		logger.info("GetScore.getScore");
-		AccountModel am = new AccountModel();
-		userId = MongoDBUtils.sanitize(userId);
+	public Emotion getEmotion(List<String> tweetList) throws UnsupportedEncodingException, IOException{
+		logger.info("AccessEmotion.getEmotion");
 
-		List<Integer> scoreList= new ArrayList<Integer>();
+		List<Integer> likeList= new ArrayList<Integer>();
+		List<Integer> joyList= new ArrayList<Integer>();
+		List<Integer> angerList= new ArrayList<Integer>();
+
 		for(String tweet:tweetList){
 			tweet = tweet+"";//警告消し
 
@@ -44,17 +45,11 @@ public class GetScore {
 			JSONObjectT jso = new JSONObjectT();
 			jso.setJson(url);
 
-			//感情解析で取得した値は、暫定的に"好き嫌い"のみを反映
-			scoreList.add(jso.getLikeDislike());
+			likeList.add(jso.getLikeDislike());
+			joyList.add(jso.getJoySad());
+			angerList.add(jso.getAngerFear());
 		}
 
-		int total_score = 0;
-		for(int score:scoreList){
-			total_score += score;
-		}
-
-		am.setScore(userId,total_score,scoreList);
-
-		return total_score;
+		return new Emotion(likeList,joyList,angerList);
 	}
 }

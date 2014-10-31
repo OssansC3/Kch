@@ -6,9 +6,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import kch.GetScore;
-import kch.GetTweet;
+import kch.accesser.AccessEmotion;
+import kch.accesser.AccessTwitter;
 import kch.model.AccountModel;
+import kch.utils.Emotion;
 
 import com.mongodb.DBObject;
 /**
@@ -77,21 +78,23 @@ public class PageGenController {
 	 */
 	private void generate(String userId) throws UnsupportedEncodingException, IOException{
 		AccountModel am = new AccountModel();
-		GetTweet gt = new GetTweet();
-		GetScore gs = new GetScore();
+		AccessTwitter at = new AccessTwitter();
+		AccessEmotion ae = new AccessEmotion();
 
 		if(!am.isRegistered(userId)){
 			logger.warning("アカウント"+userId+"は登録されていません。");
 			return;
 		}
 
-		List<String> tweetList = gt.getTweet(userId);
+		List<String> tweetList = at.getTweetList(userId);
 
 		if(tweetList.size() == 0){
 			logger.warning("ユーザー"+userId+"は一度もつぶやいていません．");
 			return;
 		}
 
-		gs.getScore(userId, tweetList);
+		Emotion emotion = ae.getEmotion(tweetList);
+
+		am.setScore(userId, emotion);
 	}
 }

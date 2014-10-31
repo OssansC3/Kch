@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import kch.utils.JSONObjectT;
+
 import org.junit.Test;
 
 public class JSONObjectTTest {
