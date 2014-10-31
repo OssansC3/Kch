@@ -183,16 +183,20 @@ public class AccountModel {
 	 * @param userId 取得するユーザー
 	 * @return スコア配列
 	 */
-	public BasicDBList getScoreList(String userId) throws MongoException{
+	public List<Integer> getScoreList(String userId) throws MongoException{
 		logger.info("AccountModel.getScoreList");
+		List<Integer> scoreList = new ArrayList<Integer>();
 		try{
-			if(!this.isRegistered(userId)) return new BasicDBList();
+			if(!this.isRegistered(userId)) return scoreList;
 		} catch(MongoException e){
 			throw e;
 		}
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
-		return  (BasicDBList)object.get("score");
+
+		BasicDBList list = (BasicDBList)object.get("score");
+		for(int i=0;i<list.size();i++) scoreList.add((int)list.get(i));
+		return scoreList;
 	}
 
 	/**
@@ -201,16 +205,20 @@ public class AccountModel {
 	 * @param userId 取得するユーザー
 	 * @return likeスコア配列
 	 */
-	public BasicDBList getLikeList(String userId) throws MongoException{
+	public List<Integer> getLikeList(String userId) throws MongoException{
 		logger.info("AccountModel.getLikeList");
+		List<Integer> scoreList = new ArrayList<Integer>();
 		try{
-			if(!this.isRegistered(userId)) return new BasicDBList();
+			if(!this.isRegistered(userId)) return scoreList;
 		} catch(MongoException e){
 			throw e;
 		}
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
-		return  (BasicDBList)object.get("like");
+
+		BasicDBList list = (BasicDBList)object.get("like");
+		for(int i=0;i<list.size();i++) scoreList.add((int)list.get(i));
+		return scoreList;
 	}
 
 	/**
@@ -219,16 +227,20 @@ public class AccountModel {
 	 * @param userId 取得するユーザー
 	 * @return joyスコア配列
 	 */
-	public BasicDBList getJoyList(String userId) throws MongoException{
+	public List<Integer> getJoyList(String userId) throws MongoException{
 		logger.info("AccountModel.getJoyList");
+		List<Integer> scoreList = new ArrayList<Integer>();
 		try{
-			if(!this.isRegistered(userId)) return new BasicDBList();
+			if(!this.isRegistered(userId)) return scoreList;
 		} catch(MongoException e){
 			throw e;
 		}
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
-		return  (BasicDBList)object.get("joy");
+
+		BasicDBList list = (BasicDBList)object.get("joy");
+		for(int i=0;i<list.size();i++) scoreList.add((int)list.get(i));
+		return scoreList;
 	}
 
 	/**
@@ -237,16 +249,20 @@ public class AccountModel {
 	 * @param userId 取得するユーザー
 	 * @return angerスコア配列
 	 */
-	public BasicDBList getAngerList(String userId) throws MongoException{
+	public List<Integer> getAngerList(String userId) throws MongoException{
 		logger.info("AccountModel.getAngerList");
+		List<Integer> scoreList = new ArrayList<Integer>();
 		try{
-			if(!this.isRegistered(userId)) return new BasicDBList();
+			if(!this.isRegistered(userId)) return scoreList;
 		} catch(MongoException e){
 			throw e;
 		}
 		DBObject query = new BasicDBObject("userId",userId);
 		DBObject object = coll.findOne(query);
-		return  (BasicDBList)object.get("anger");
+
+		BasicDBList list = (BasicDBList)object.get("anger");
+		for(int i=0;i<list.size();i++) scoreList.add((int)list.get(i));
+		return scoreList;
 	}
 
 }

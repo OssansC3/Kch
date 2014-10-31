@@ -1,5 +1,6 @@
 package kch.rest;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import kch.model.AccountModel;
@@ -13,10 +14,32 @@ public class GetKchService {
 	private String GREEN_IMAGE_URI="/images/green.jpg";
 	private String YELLOW_IMAGE_URI="/images/yellow.jpg";
 	private String RED_IMAGE_URI="/images/red.jpg";
+	private AccountModel am;
 	private Logger logger;
 
 	public GetKchService(){
 		logger = Logger.getLogger(getClass().getName());
+		this.am = new AccountModel();
+	}
+
+	public int[] getScoreList(String userId){
+		return toArray(am.getScoreList(userId));
+	}
+
+	public int[] getLikeList(String userId){
+		return toArray(am.getLikeList(userId));
+	}
+
+	public int[] getJoyList(String userId){
+		return toArray(am.getJoyList(userId));
+	}
+
+	public int[] getAngerList(String userId){
+		return toArray(am.getAngerList(userId));
+	}
+
+	public int getTotalScore(String userId){
+		return am.getTotalScore(userId);
 	}
 
 	public String GetKchImageURI(String userId){
@@ -48,6 +71,15 @@ public class GetKchService {
 		else{
 			return RED_IMAGE_URI;
 		}
+	}
+
+
+	private int[] toArray(List<Integer> list){
+		int[] array = new int[list.size()];
+		for (int i=0; i<list.size(); i++) {
+		  array[i] = list.get(i); // Integer
+		}
+		return array;
 	}
 
 }
