@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import kch.model.AccountModel;
+import kch.utils.MongoDBUtils;
+
 /**
  * 取得したツイートを感情解析APIに投げてスコアを取得，
  * 取得したスコアをデータベースに登録する．

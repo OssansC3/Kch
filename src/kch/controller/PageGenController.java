@@ -1,10 +1,14 @@
-package kch;
+package kch.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
+import kch.GetScore;
+import kch.GetTweet;
+import kch.model.AccountModel;
 
 import com.mongodb.DBObject;
 /**

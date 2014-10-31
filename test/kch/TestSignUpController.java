@@ -1,6 +1,8 @@
 package kch;
 
 import static org.junit.Assert.*;
+import kch.controller.SignUpController;
+import kch.utils.MongoDBUtils;
 
 import org.junit.Test;
 

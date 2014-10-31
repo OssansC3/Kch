@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import kch.utils.MongoDBUtils;
+
 import org.junit.Test;
 
 import com.mongodb.BasicDBList;

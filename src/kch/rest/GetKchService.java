@@ -1,6 +1,9 @@
-package kch;
+package kch.rest;
 
 import java.util.logging.Logger;
+
+import kch.model.AccountModel;
+import kch.utils.MongoDBUtils;
 
 import com.mongodb.MongoException;
 

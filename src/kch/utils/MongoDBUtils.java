@@ -1,4 +1,4 @@
-package kch;
+package kch.utils;
 
 import java.net.UnknownHostException;
 

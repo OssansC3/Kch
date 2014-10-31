@@ -1,9 +1,11 @@
-package kch;
+package kch.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
+import kch.utils.MongoDBUtils;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;

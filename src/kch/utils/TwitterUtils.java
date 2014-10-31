@@ -1,4 +1,4 @@
-package kch;
+package kch.utils;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;

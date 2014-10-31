@@ -1,4 +1,5 @@
-/bin
-/build/
+./bin
+./build
 *.aar
 *.class
+/bin
