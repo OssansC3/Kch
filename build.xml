@@ -5,7 +5,6 @@
 	<!-- warファイルの設定 -->
 	<property name="service.name" value="kch" />
 	<property name="aar.home" value="C:/tomcat/axis2/webapps" />
-	<property name="war.home" value="C:/tomcat/webapps" />
 	<property name="dest" value="build" />
 	<property name="dest.metainf" value="${dest}/META-INF" />
 	<property name="dest.lib" value="${dest}/lib" />
@@ -52,7 +51,6 @@
 
 		<!-- jarタスクによってaarファイルを作成 -->
 		<jar destfile="${service.name}.aar" basedir="${dest}" />
-		<jar destfile="${service.name}.war" basedir="${dest}" />
 	</target>
 
 	<!-- tomcatへデプロイ -->
@@ -65,7 +63,6 @@
 			<fileset dir="WebContent" />
 		</copy>
 
-		<copy file="${service.name}.war" tofile="${war.home}/${service.name}.war" />
 	</target>
 
 </project>

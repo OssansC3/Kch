@@ -12,29 +12,45 @@ public class GetKchService {
 	}
 
 	public int[] getScoreList(String userId){
-		return toArray(am.getScoreList(userId));
+		return toIntArray(am.getScoreList(userId));
 	}
 
 	public int[] getLikeList(String userId){
-		return toArray(am.getLikeList(userId));
+		return toIntArray(am.getLikeList(userId));
 	}
 
 	public int[] getJoyList(String userId){
-		return toArray(am.getJoyList(userId));
+		return toIntArray(am.getJoyList(userId));
 	}
 
 	public int[] getAngerList(String userId){
-		return toArray(am.getAngerList(userId));
+		return toIntArray(am.getAngerList(userId));
 	}
 
 	public int getTotalScore(String userId){
 		return am.getTotalScore(userId);
 	}
 
-	private int[] toArray(List<Integer> list){
+	public String[] getUserData(String userId){
+		return toStringArray(am.getUserData(userId));
+	}
+
+	public String[] getUserList(){
+		return toStringArray(am.getUserList());
+	}
+
+	private int[] toIntArray(List<Integer> list){
 		int[] array = new int[list.size()];
 		for (int i=0; i<list.size(); i++) {
 		  array[i] = list.get(i); // Integer
+		}
+		return array;
+	}
+
+	private String[] toStringArray(List<String> list){
+		String[] array = new String[list.size()];
+		for (int i=0; i<list.size(); i++) {
+		  array[i] = list.get(i); // String
 		}
 		return array;
 	}

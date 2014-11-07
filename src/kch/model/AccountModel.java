@@ -52,8 +52,11 @@ public class AccountModel {
 		logger.info("AccountModel.registerAccount");
 		DBObject user = new BasicDBObject();
 		user.put("userId",userId);
-		user.put("totalScore",0);
+		user.put("like",newScore());
+		user.put("joy",newScore());
+		user.put("anger",newScore());
 		user.put("score",newScore());
+		user.put("totalScore",0);
 		user.put("date",newDate());
 		coll.insert(user);
 	}
@@ -104,6 +107,69 @@ public class AccountModel {
 		}
 
 		return oldList;
+	}
+
+	/**
+	 * ユーザー一覧を取得する．
+	 * <ol>
+	 * <li>登録済みのユーザーを全て取得する．</li>
+	 * <li>取得したユーザーリストを返す．</li>
+	 * </ol>
+	 * @return 更新するユーザーのリスト
+	 */
+	public List<String> getUserList(){
+		logger.info("AccountModel.getUserList");
+		List<String> userList = new ArrayList<String>();
+
+		DBCursor cursor = coll.find().sort(new BasicDBObject("userId",1));
+		while(cursor.hasNext()){
+			userList.add((String)cursor.next().get("userId"));
+		}
+
+		return userList;
+	}
+
+	public List<String> getUserData(String userId){
+		logger.info("AccountModel.getUserData");
+		List<String> dataList = new ArrayList<String>();
+		StringBuilder sb;
+		BasicDBList list;
+
+		try{
+			if(!this.isRegistered(userId)) return dataList;
+		} catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+
+		dataList.add((String)"userId:"+object.get("userId"));
+
+		sb = new StringBuilder("like:");
+		list = (BasicDBList)object.get("like");
+		for(int i=0;i<list.size();i++) sb.append(list.get(i)+",");
+		dataList.add(sb.substring(0, sb.length()-2).toString());
+
+		sb = new StringBuilder("joy:");
+		list = (BasicDBList)object.get("joy");
+		for(int i=0;i<list.size();i++) sb.append(list.get(i)+",");
+		dataList.add(sb.substring(0, sb.length()-2).toString());
+
+		sb = new StringBuilder("anger:");
+		list = (BasicDBList)object.get("anger");
+		for(int i=0;i<list.size();i++) sb.append(list.get(i)+",");
+		dataList.add(sb.substring(0, sb.length()-2).toString());
+
+		sb = new StringBuilder("score:");
+		list = (BasicDBList)object.get("score");
+		for(int i=0;i<list.size();i++) sb.append(list.get(i)+",");
+		dataList.add(sb.substring(0, sb.length()-2).toString());
+
+		dataList.add((String)"totalScore:"+object.get("totalScore"));
+
+		dataList.add((String)"date:"+object.get("date"));
+
+		return dataList;
 	}
 
 	/**

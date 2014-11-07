@@ -1,11 +1,11 @@
-var endpoint = 'axis2/services/SignUpController';
+var endpoint = 'http://'+location.host+':8080/axis2/services/SignUpController';
 
 $('#signup').click(function() {
 	var userId = $('#userId').val();
 
 	$.ajax({
 		type: 'GET',
-		url: endpoint + '/registerAccount',
+		url: endpoint + '/execute',
 		data: {
 			userId: userId,
 		},

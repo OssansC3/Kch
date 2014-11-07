@@ -34,7 +34,7 @@ public class AccessTwitter {
 	 * @return ツイート内容のリスト．例外の場合は空リスト．
 	 */
 	public List<String> getTweetList(String userId) {
-		logger.info("AccessTwitter.getTweetList");
+		logger.info("AccessTwitter.getTweetList:"+userId);
 		userId = MongoDBUtils.sanitize(userId);
 
 		List<String> tweetList = new ArrayList<String>();
@@ -43,6 +43,7 @@ public class AccessTwitter {
 			for(Status status:statusList){
 				tweetList.add(TwitterUtils.sanitize(status.getText()));
 			}
+			logger.info("AccessTwitter.GET:"+tweetList.toString());
 			return tweetList;
 		} catch(TwitterException e){
 			logger.severe(e.getMessage());

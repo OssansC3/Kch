@@ -33,7 +33,7 @@ public class PageGenController {
 	 * <li>queコレクション中の更新したアカウントの時刻を更新する．</li>
 	 * </ol>
 	 */
-	public void execute(){
+	public String execute(){
 		logger.info("PageGenController.execute");
 		AccountModel qm = new AccountModel();
 		List<DBObject> oldList = qm.getOldList(9);
@@ -59,6 +59,8 @@ public class PageGenController {
 			order += 1000;
 			qm.updateDate(userId,date);
 		}
+
+		return "done";
 	}
 
 	/**

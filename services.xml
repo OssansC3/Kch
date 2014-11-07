@@ -8,15 +8,6 @@
 		<parameter name="ServiceClass" locked="false">kch.controller.SignUpController</parameter>
 		<schema elementFormDefaultQualified="false" attributeFormDefaultQualified="false"/>
 	</service>
-	<service name="GetKchService" scope="application">
-		<description></description>
-		<messageReceivers>
-			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver" />
-			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
-		</messageReceivers>
-		<parameter name="ServiceClass" locked="false">kch.rest.GetKchService</parameter>
-		<schema elementFormDefaultQualified="false" attributeFormDefaultQualified="false"/>
-	</service>
 	<service name="PageGenController" scope="application">
 		<description></description>
 		<messageReceivers>
@@ -24,6 +15,24 @@
 			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
 		</messageReceivers>
 		<parameter name="ServiceClass" locked="false">kch.controller.PageGenController</parameter>
+		<schema elementFormDefaultQualified="false" attributeFormDefaultQualified="false"/>
+	</service>
+	<service name="GetKchController" scope="application">
+		<description></description>
+		<messageReceivers>
+			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver" />
+			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+		</messageReceivers>
+		<parameter name="ServiceClass" locked="false">kch.controller.GetKchController</parameter>
+		<schema elementFormDefaultQualified="false" attributeFormDefaultQualified="false"/>
+	</service>
+	<service name="GetKchService" scope="application">
+		<description></description>
+		<messageReceivers>
+			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver" />
+			<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+		</messageReceivers>
+		<parameter name="ServiceClass" locked="false">kch.rest.GetKchService</parameter>
 		<schema elementFormDefaultQualified="false" attributeFormDefaultQualified="false"/>
 	</service>
 </serviceGroup>

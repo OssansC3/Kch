@@ -1,4 +1,4 @@
-var endpoint = 'axis2/services/GetKchService';
+var endpoint = 'http://'+location.host+':8080/axis2/services/GetKchController';
 
 $(function() {
 	var userId = getUrlVars()["userId"];
@@ -9,7 +9,7 @@ $(function() {
 	$.ajax({
 		type : 'GET',
 		async: false,
-		url : endpoint + '/GetKchImageURI',
+		url : endpoint + '/execute',
 		data : {
 			userId : userId,
 		},
