@@ -2,6 +2,7 @@ package kch.accesser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import kch.utils.MongoDBUtils;
@@ -41,7 +42,18 @@ public class AccessTwitter {
 		try{
 			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,10));
 			for(Status status:statusList){
-				tweetList.add(TwitterUtils.sanitize(status.getText()));
+				String str = status.getText();
+				StringTokenizer sta = new StringTokenizer(str, " ");
+				StringBuilder sb = new StringBuilder();
+				while(sta.hasMoreTokens()) {
+					String next = sta.nextToken();
+					next = cut(next,"#");
+					next = cut(next,"@");
+					next = cut(next,"http");
+					next = cut(next,"RT");
+					sb.append(next);
+				}
+				tweetList.add(TwitterUtils.sanitize(sb.toString()));
 			}
 			logger.info("AccessTwitter.GET:"+tweetList.toString());
 			return tweetList;
@@ -49,6 +61,13 @@ public class AccessTwitter {
 			logger.severe(e.getMessage());
 			return new ArrayList<String>();
 		}
+	}
+
+	private String cut(String str,String tar){
+		int remove = str.indexOf(tar);
+		if(remove == -1) return str;
+		else if(remove == 0) return "";
+		else return str.substring(0, remove);
 	}
 
 }

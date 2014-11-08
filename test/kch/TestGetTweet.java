@@ -56,5 +56,4 @@ public class TestGetTweet {
 		int actual = list.size();
 		assertEquals(expected,actual);
 	}
-
 }
