@@ -20,6 +20,7 @@ import com.mongodb.DBObject;
  */
 public class PageGenController {
 	private Logger logger;
+	private final static String PASSWORD = "tAOiBpvSPZFutAfhuobSaa1V2HY2U1nEM3vMlFXI";
 
 	public PageGenController(){
 		logger = Logger.getLogger(getClass().getName());
@@ -28,13 +29,18 @@ public class PageGenController {
 	/**
 	 * DBに登録されたアカウントいくつか取得して感情値を更新する．
 	 * <ol>
+	 * <li>勝手に実行されないようにパスワードを設定．”tAOiBpvSPZFutAfhuobSaa1V2HY2U1nEM3vMlFXI”</li>
 	 * <li>queコレクションからアカウントデータを9個取得する．</li>
 	 * <li>各アカウントについて，感情値を解析してAccountコレクションを更新する．</li>
 	 * <li>queコレクション中の更新したアカウントの時刻を更新する．</li>
 	 * </ol>
 	 */
-	public String execute(){
+	public String execute(String password){
 		logger.info("PageGenController.execute");
+		if(!password.equals(PASSWORD)) {
+			logger.warning("password is incorrect.");
+			return "password is incorrect.";
+		}
 		AccountModel qm = new AccountModel();
 		List<DBObject> oldList = qm.getOldList(9);
 
