@@ -20,7 +20,8 @@ import com.mongodb.DBObject;
  */
 public class PageGenController {
 	private Logger logger;
-	private final static String PASSWORD = "tAOiBpvSPZFutAfhuobSaa1V2HY2U1nEM3vMlFXI";
+	private final String PASSWORD = "tAOiBpvSPZFutAfhuobSaa1V2HY2U1nEM3vMlFXI";
+	private final long JST = 32400000;
 
 	public PageGenController(){
 		logger = Logger.getLogger(getClass().getName());
@@ -60,7 +61,7 @@ public class PageGenController {
 			}
 
 			Date date = new Date();
-			date.setTime(date.getTime()+order);
+			date.setTime(date.getTime()+JST+order);
 			//更新順を保持するために1秒ずつ加算する
 			order += 1000;
 			qm.updateDate(userId,date);
