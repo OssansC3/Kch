@@ -2,7 +2,6 @@ package kch.utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.math.*;
 
 public class Emotion {
 	private List<Integer> likeList;
