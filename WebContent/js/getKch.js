@@ -1,5 +1,5 @@
 var endpoint = 'http://'+location.host+':8080/axis2/services/GetKchController';
-var srcH = '<img src="';
+var srcH = '<img src="images/';
 var srcT = '"/>';
 
 $(function() {
