@@ -58,6 +58,7 @@ public class AccountModel {
 		user.put("score",newScore());
 		user.put("totalScore",0);
 		user.put("date",newDate());
+		user.put("TLdate",new Date(0));
 		coll.insert(user);
 	}
 

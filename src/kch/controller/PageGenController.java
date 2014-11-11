@@ -56,11 +56,13 @@ public class PageGenController {
 			if(count>=LIMIT) break;
 			String userId = (String) old.get("userId");
 			Date TLdate = (Date) old.get("TLdate");
+			if(TLdate==null) TLdate = new Date(0);
+			else TLdate.setTime(TLdate.getTime()-JST);
 			Date newTLdate = at.getTLdate(userId);
 
 			if(TLdate.before(newTLdate)){
 				try {
-					generate(userId,PASSWORD);
+					generate(userId);
 					am.updateTLDate(userId,newTLdate);
 					count++;
 				} catch (UnsupportedEncodingException e) {
@@ -96,12 +98,7 @@ public class PageGenController {
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
 	 */
-	public void generate(String userId,String password) throws UnsupportedEncodingException, IOException{
-		if(!password.equals(PASSWORD)) {
-			logger.warning("password is incorrect.");
-			return;
-		}
-
+	private void generate(String userId) throws UnsupportedEncodingException, IOException{
 		AccountModel am = new AccountModel();
 		AccessTwitter at = new AccessTwitter();
 		AccessEmotion ae = new AccessEmotion();
@@ -122,5 +119,36 @@ public class PageGenController {
 
 		am.setScore(userId, emotion);
 		return;
+	}
+
+	/**
+	 * TLに関係なく常に更新できるコマンド
+	 * @param userId
+	 * @param password
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 */
+	public String force(String userId,String password) throws UnsupportedEncodingException, IOException{
+		logger.info("PageGenController.force");
+
+		if(!password.equals(PASSWORD)) {
+			logger.warning("password is incorrect.");
+			return "password is incorrect.";
+		}
+
+		AccountModel am = new AccountModel();
+		AccessTwitter at = new AccessTwitter();
+
+		generate(userId);
+
+		Date newTLdate = at.getTLdate(userId);
+		am.updateTLDate(userId,newTLdate);
+
+		Date date = new Date();
+		date.setTime(date.getTime()+JST);
+		am.updateDate(userId,date);
+
+		return "done";
 	}
 }
