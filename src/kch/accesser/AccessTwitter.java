@@ -1,6 +1,7 @@
 package kch.accesser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
@@ -61,6 +62,20 @@ public class AccessTwitter {
 			logger.severe(e.getMessage());
 			return new ArrayList<String>();
 		}
+	}
+
+	public Date getTLdate(String userId){
+		logger.info("AccessTwitter.getTLdate:"+userId);
+		userId = MongoDBUtils.sanitize(userId);
+
+		try{
+			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,1));
+			return statusList.get(0).getCreatedAt();
+		} catch(TwitterException e){
+			logger.severe(e.getMessage());
+			return new Date(0);
+		}
+
 	}
 
 	private String cut(String str,String tar){

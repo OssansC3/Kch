@@ -21,6 +21,7 @@ import com.mongodb.DBObject;
 public class PageGenController {
 	private Logger logger;
 	private final String PASSWORD = "tAOiBpvSPZFutAfhuobSaa1V2HY2U1nEM3vMlFXI";
+	private final int LIMIT = 9;
 	private final long JST = 32400000;
 
 	public PageGenController(){
@@ -42,29 +43,37 @@ public class PageGenController {
 			logger.warning("password is incorrect.");
 			return "password is incorrect.";
 		}
-		AccountModel qm = new AccountModel();
-		List<DBObject> oldList = qm.getOldList(9);
+		AccountModel am = new AccountModel();
+		AccessTwitter at = new AccessTwitter();
+		List<DBObject> oldList = am.getOldList();
 
-		//更新順を保持するための値
+		//何人更新したかを計算する．
+		int count = 0;
 		long order = 0;
 
 		for(DBObject old:oldList){
-			System.out.println(old);
+			//9人更新したら終了する
+			if(count>=LIMIT) break;
 			String userId = (String) old.get("userId");
+			Date TLdate = (Date) old.get("TLdate");
+			Date newTLdate = at.getTLdate(userId);
 
-			try {
-				generate(userId);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(TLdate.before(newTLdate)){
+				try {
+					generate(userId,PASSWORD);
+					am.updateTLDate(userId,newTLdate);
+					count++;
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 			Date date = new Date();
 			date.setTime(date.getTime()+JST+order);
-			//更新順を保持するために1秒ずつ加算する
-			order += 1000;
-			qm.updateDate(userId,date);
+			order+=1000;
+			am.updateDate(userId,date);
 		}
 
 		return "done";
@@ -82,10 +91,17 @@ public class PageGenController {
 	 * </ol>
 	 *
 	 * @param userId ツイートを取得するユーザー名
+	 * @param TLdate タイムラインの最終更新日時
+	 * @return 更新したかの是非
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
 	 */
-	private void generate(String userId) throws UnsupportedEncodingException, IOException{
+	public void generate(String userId,String password) throws UnsupportedEncodingException, IOException{
+		if(!password.equals(PASSWORD)) {
+			logger.warning("password is incorrect.");
+			return;
+		}
+
 		AccountModel am = new AccountModel();
 		AccessTwitter at = new AccessTwitter();
 		AccessEmotion ae = new AccessEmotion();
@@ -105,5 +121,6 @@ public class PageGenController {
 		Emotion emotion = ae.getEmotion(tweetList);
 
 		am.setScore(userId, emotion);
+		return;
 	}
 }

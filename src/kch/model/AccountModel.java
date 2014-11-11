@@ -88,22 +88,18 @@ public class AccountModel {
 	/**
 	 * 更新するユーザー一覧を取得する．
 	 * <ol>
-	 * <li>更新時刻がもっとも若いユーザーをcount個取得する．</li>
-	 * <li>登録済みユーザーがcount個以下なら全部取得する．</li>
+	 * <li>ユーザーの一覧を更新時間が若い順に取得する．</li>
 	 * <li>取得したユーザーリストを返す．</li>
 	 * </ol>
-	 * @param count 取得する数
 	 * @return 更新するユーザーのリスト
 	 */
-	public List<DBObject> getOldList(int count){
+	public List<DBObject> getOldList(){
 		logger.info("AccountModel.getOldList");
 		List<DBObject> oldList = new ArrayList<DBObject>();
 
 		DBCursor cursor = coll.find().sort(new BasicDBObject("date",1));
-		int i=0;
-		while(cursor.hasNext()&&i<count){
+		while(cursor.hasNext()){
 			oldList.add(cursor.next());
-			i++;
 		}
 
 		return oldList;
@@ -208,6 +204,7 @@ public class AccountModel {
 		list.add(0);
 		return list;
 	}
+
 	/**
 	 * ユーザーの更新時間を更新する．
 	 * <ol>
@@ -220,6 +217,22 @@ public class AccountModel {
 		logger.info("AccountModel.updateDate");
 		DBObject qUser = new BasicDBObject("userId",userId);
 		DBObject qDate = new BasicDBObject("$set",new BasicDBObject("date",date));
+
+		coll.update(qUser, qDate);
+	}
+
+	/**
+	 * ユーザーの最新のＴＬの時間を更新する．
+	 * <ol>
+	 * <li>指定したユーザーの時刻を指定したものに更新する．</li>
+	 * </ol>
+	 * @param userId 更新するユーザー
+	 * @param date 更新する時間
+	 */
+	public void updateTLDate(String userId,Date date){
+		logger.info("AccountModel.updateDate");
+		DBObject qUser = new BasicDBObject("userId",userId);
+		DBObject qDate = new BasicDBObject("$set",new BasicDBObject("TLdate",date));
 
 		coll.update(qUser, qDate);
 	}
