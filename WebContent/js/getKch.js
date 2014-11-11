@@ -14,7 +14,7 @@ $(function() {
 			userId : userId,
 		},
 		success : function(xml) {
-			$('#KchScore').src("images/"+$('return', xml).text());
+			$('#KchImage').src("images/"+$('return', xml).text());
 		},
 	});
 });
