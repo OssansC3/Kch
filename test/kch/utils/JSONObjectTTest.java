@@ -1,4 +1,4 @@
-package kch;
+package kch.utils;
 
 import static org.junit.Assert.*;
 

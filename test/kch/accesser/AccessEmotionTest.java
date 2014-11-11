@@ -24,7 +24,7 @@ public class AccessEmotionTest {
 
 		System.out.println("TotalScore is "+emo.getTotalScore());
 
-		for(int i =0; i <= tweetList.size();i++){
+		for(int i =0; i < tweetList.size();i++){
 			System.out.println("Anger\t" +i+ "\tis "+ emo.getAngerList().get(i));
 			System.out.println("Joy\t" +i+ "\tis "+ emo.getJoyList().get(i));
 			System.out.println("like\t" +i+ "\tis "+ emo.getLikeList().get(i));
