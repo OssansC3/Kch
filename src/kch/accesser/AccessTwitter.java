@@ -70,10 +70,11 @@ public class AccessTwitter {
 
 		try{
 			List<Status> statusList = twitter.getUserTimeline(userId, new Paging(1,1));
-			return statusList.get(0).getCreatedAt();
+			if(statusList.isEmpty()) return new Date();
+			else return statusList.get(0).getCreatedAt();
 		} catch(TwitterException e){
 			logger.severe(e.getMessage());
-			return new Date(0);
+			return new Date();
 		}
 
 	}
