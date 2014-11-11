@@ -1,7 +1,5 @@
 package kch.accesser;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
