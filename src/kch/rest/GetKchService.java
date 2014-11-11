@@ -31,6 +31,10 @@ public class GetKchService {
 		return am.getTotalScore(userId);
 	}
 
+	public boolean isRegistered(String userId) {
+		return am.isRegistered(userId);
+	}
+
 	public String[] getUserData(String userId){
 		return toStringArray(am.getUserData(userId));
 	}

@@ -2,32 +2,36 @@ package kch.controller;
 
 import java.util.logging.Logger;
 
-import kch.model.AccountModel;
+import kch.rest.GetKchService;
 import kch.utils.MongoDBUtils;
 
 import com.mongodb.MongoException;
 
 public class GetKchController {
 	//暫定的に画像パスを設定
-	private String ERROR_IMAGE_URI="/images/error.jpg";
-	private String GREEN_IMAGE_URI="/images/green.jpg";
-	private String YELLOW_IMAGE_URI="/images/yellow.jpg";
-	private String RED_IMAGE_URI="/images/red.jpg";
+	private String ERROR_IMAGE_URI="error.jpg";
+	private String GREEN_IMAGE_URI="green.jpg";
+	private String YELLOW_IMAGE_URI="yellow.jpg";
+	private String RED_IMAGE_URI="red.jpg";
 	private Logger logger;
 
-	public String execute(String userId){
-		logger.info("GetKchService.execute");
+	public GetKchController() {
+		logger = Logger.getLogger(getClass().getName());
+	}
+
+	public String execute(String userId) throws Exception{
+		logger.info("GetKchController.execute");
 		if(userId==null){
 			return "null";
 		}
 		userId = MongoDBUtils.sanitize(userId);
-		AccountModel account = new AccountModel();
-		if(!account.isRegistered(userId)){
+		GetKchService rest = new GetKchService();
+		if(!rest.isRegistered(userId)){
 			return ERROR_IMAGE_URI;
 		}
 		int score = 0;
 		try{
-			score = account.getTotalScore(userId);
+			score = rest.getTotalScore(userId);
 		}
 		catch(MongoException e){
 			return RED_IMAGE_URI;
