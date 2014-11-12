@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import kch.rest.GetKchService;
 import kch.utils.MongoDBUtils;
-
 import com.mongodb.MongoException;
 
 public class GetKchController {
@@ -14,18 +13,19 @@ public class GetKchController {
 	private String YELLOW_IMAGE_URI="yellow.jpg";
 	private String RED_IMAGE_URI="red.jpg";
 	private Logger logger;
+	private GetKchService rest;
 
 	public GetKchController() {
 		logger = Logger.getLogger(getClass().getName());
+		rest = new GetKchService();
 	}
 
-	public String execute(String userId) throws Exception{
-		logger.info("GetKchController.execute");
+	public String executeImage(String userId) throws Exception{
+		logger.info("GetKchController.executeImage");
 		if(userId==null){
 			return "null";
 		}
 		userId = MongoDBUtils.sanitize(userId);
-		GetKchService rest = new GetKchService();
 		if(!rest.isRegistered(userId)){
 			return ERROR_IMAGE_URI;
 		}
@@ -50,5 +50,20 @@ public class GetKchController {
 		}
 	}
 
+	public Object[][] executeChart(String userId){
+		logger.info("GetKchController.executeChart");
+		userId = MongoDBUtils.sanitize(userId);
+
+		int[] likeList = rest.getLikeList(userId);
+		int[] joyList = rest.getJoyList(userId);
+		int[] angerList = rest.getAngerList(userId);
+		Object[][] emotionArray = new Object[likeList.length][3];
+		for(int i=0;i<likeList.length;i++){
+			Object[] emotion = new Object[]{likeList[i],joyList[i],angerList[i]};
+			emotionArray[i] = emotion;
+		}
+
+		return emotionArray;
+	}
 
 }

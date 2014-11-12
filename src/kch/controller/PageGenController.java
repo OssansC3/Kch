@@ -131,7 +131,6 @@ public class PageGenController {
 	 */
 	public String force(String userId,String password) throws UnsupportedEncodingException, IOException{
 		logger.info("PageGenController.force");
-
 		if(!password.equals(PASSWORD)) {
 			logger.warning("password is incorrect.");
 			return "password is incorrect.";
