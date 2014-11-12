@@ -11,5 +11,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/pbl/etc/mongo-2.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/voicetext4j-0.13.0-SNAPSHOT-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/voicetext4j-0.13.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/voicetext4j-0.13.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
