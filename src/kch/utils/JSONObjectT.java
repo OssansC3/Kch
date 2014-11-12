@@ -57,18 +57,19 @@ public class JSONObjectT {
 		JsonParser parser = factory.createJsonParser(json);
 
 		//JSONのパース処理
+		//値の範囲は-3から3の7段階で帰ってきます。
 		while (parser.nextToken() != JsonToken.END_OBJECT) {
 			String name = parser.getCurrentName();
 			if(name != null) {
 				parser.nextToken();
-				if(name.equals("Angerfear")) {
-					//名前
+				if(name.equals("angerfear")) {
+					//怒りと恐れ値
 					this.setAngerFear(Integer.parseInt(parser.getText()));
 				}else if(name.equals("joysad")) {
-					//年齢
+					//喜びと悲しみ
 					this.setJoySad(Integer.parseInt(parser.getText()));
 				}else if(name.equals("likedislike")) {
-					//出身地
+					//好き嫌い
 					this.setLikeDislike(Integer.parseInt(parser.getText()));
 				}else if(name.equals("analyzed_text")) {
 					//詳細情報
