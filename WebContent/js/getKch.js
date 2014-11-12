@@ -1,6 +1,6 @@
 var endpoint = 'http://' + location.host + ':8080/axis2/services/GetKchController';
 var srcH = '<img src="images/';
-var srcT = '"/>';
+var srcT = '" width="500" height="707"/>';
 
 $(function() {
 	var userId = getUrlVars()["userId"];
