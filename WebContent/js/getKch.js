@@ -32,6 +32,7 @@ function drawChart() {
 		legend : {
 			position : 'top'
 		},
+		colors : ['blue', 'green', 'red'],
 		title : '感情の変化',
 		vAxis : {
 			textPosition : 'none',
@@ -48,8 +49,30 @@ function drawChart() {
 		}
 	};
 
+	var totalScore = getTotalScore();
+	var gauge_data = google.visualization.arrayToDataTable([['Label', 'Value'], ['感情値', totalScore]]);
+
+	var gauge_options = {
+		max : 100,
+		min : 0,
+		width : 200,
+		height : 200,
+		redFrom : 0,
+		redTo : 30,
+		yellowFrom : 30,
+		yellowTo : 70,
+		greenFrom : 70,
+		greenTo : 100,
+		majorTicks : [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+		minorTicks : 2,
+		textPosition : 'none'
+	};
+
 	var line_chart = new google.visualization.LineChart(document.getElementById('line_chart'));
 	line_chart.draw(line_data, line_options);
+
+	var gauge_chart = new google.visualization.Gauge(document.getElementById('gauge_chart'));
+	gauge_chart.draw(gauge_data, gauge_options);
 
 }
 
@@ -76,6 +99,25 @@ function getEmotionArray() {
 	return scoreArray;
 }
 
+function getTotalScore() {
+	var userId = getUrlVars()["userId"];
+	var totalScore;
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : endpoint + '/executeGauge',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			var result = $('return', xml);
+			totalScore = eval(result.text());
+		},
+	});
+
+	return totalScore;
+}
+
 function getUrlVars() {
 	var vars = [], hash;
 	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -88,7 +130,7 @@ function getUrlVars() {
 }
 
 google.load("visualization", "1", {
-	packages : ["corechart"]
+	packages : ["corechart", "gauge"],
 });
-
 google.setOnLoadCallback(drawChart);
+

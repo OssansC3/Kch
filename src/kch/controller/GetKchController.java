@@ -66,4 +66,25 @@ public class GetKchController {
 		return emotionArray;
 	}
 
+	public int executeGauge(String userId){
+		logger.info("GetKchController.executeGauge");
+		userId = MongoDBUtils.sanitize(userId);
+
+		if(userId==null){
+			return 0;
+		}
+		userId = MongoDBUtils.sanitize(userId);
+		if(!rest.isRegistered(userId)){
+			return 0;
+		}
+		int score = 0;
+		try{
+			score = rest.getTotalScore(userId);
+		}
+		catch(MongoException e){
+			return 0;
+		}
+
+		return score;
+	}
 }
