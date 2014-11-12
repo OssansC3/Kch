@@ -6,6 +6,7 @@ import am.ik.voicetext4j.EmotionalSpeaker;
 
 public class AccessVoice {
 
+	//Hoya VoiceOverWebAPIのAPIキー
 	private final static String API_KEY = "5rrawjshfwagqsx7";
 
 	public void testSay() throws Exception {
