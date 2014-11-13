@@ -2,6 +2,7 @@ var endpoint = 'http://' + location.host + ':8080/axis2/services/GetKchControlle
 var check = 'http://' + location.host + ':8080/axis2/services/GetKchService';
 var srcH = '<img src="images/';
 var srcT = '" width="500" height="707"/>';
+var userName = '';
 
 $(function() {
 	var userId = getUrlVars()["userId"];
@@ -14,32 +15,62 @@ $(function() {
 		$('#gauge_chart').css("height", "0px");
 		$('#gauge_chart').css("width", "0px");
 	} else {
-		$.ajax({
-			type : 'GET',
-			async : false,
-			url : check + '/isRegistered',
-			data : {
-				userId : userId,
-			},
-			success : function(xml) {
-				if ($('return', xml).text() == 'true') {
-					execute(userId);
-				} else {
-					$('#message').text("ユーザー" + userId + "は登録されていません");
-					$('#kchImage').css("height", "0px");
-					$('#kchImage').css("width", "0px");
-					$('#line_chart').css("height", "0px");
-					$('#line_chart').css("width", "0px");
-					$('#gauge_chart').css("height", "0px");
-					$('#gauge_chart').css("width", "0px");
-				}
-			},
-		});
+		isRegistered(userId);
 	}
 
 });
 
+function isRegistered(userId) {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : check + '/isRegistered',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			if ($('return', xml).text() == 'true') {
+				setName(userId);
+				isAnalysed(userId);
+			} else {
+				$('#message').text('ユーザー"' + userId + '"は登録されていません');
+				$('#kchImage').css("height", "0px");
+				$('#kchImage').css("width", "0px");
+				$('#line_chart').css("height", "0px");
+				$('#line_chart').css("width", "0px");
+				$('#gauge_chart').css("height", "0px");
+				$('#gauge_chart').css("width", "0px");
+			}
+		},
+	});
+}
+
+function isAnalysed(userId) {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : check + '/isAnalysed',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			if ($('return', xml).text() == 'true') {
+				execute(userId);
+			} else {
+				$('#message').text('ユーザー"' + userName + '"はまだ解析されていません');
+				$('#kchImage').css("height", "0px");
+				$('#kchImage').css("width", "0px");
+				$('#line_chart').css("height", "0px");
+				$('#line_chart').css("width", "0px");
+				$('#gauge_chart').css("height", "0px");
+				$('#gauge_chart').css("width", "0px");
+			}
+		},
+	});
+}
+
 function execute(userId) {
+	google.setOnLoadCallback(drawChart);
 	$.ajax({
 		type : 'GET',
 		async : true,
@@ -48,12 +79,25 @@ function execute(userId) {
 			userId : userId,
 		},
 		success : function(xml) {
-			$('#message').text("ユーザー" + userId + "の感情データ");
+			$('#message').text('ユーザー"' + userName + '"の感情データ');
 			$('#kchImage').append(srcH + $('return', xml).text() + srcT);
 		},
 	});
 
-	google.setOnLoadCallback(drawChart);
+}
+
+function setName(userId) {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : check + '/getUserName',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			userName = $('return', xml).text();
+		},
+	});
 }
 
 function drawChart() {
