@@ -11,6 +11,7 @@ import kch.accesser.AccessEmotion;
 import kch.accesser.AccessTwitter;
 import kch.model.AccountModel;
 import kch.utils.Emotion;
+import kch.utils.MongoDBUtils;
 
 import com.mongodb.DBObject;
 /**
@@ -118,7 +119,7 @@ public class PageGenController {
 
 		String userName = "";
 		try {
-			userName = at.getUserName(userId);
+			userName = MongoDBUtils.sanitize(at.getUserName(userId));
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}

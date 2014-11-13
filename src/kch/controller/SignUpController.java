@@ -44,7 +44,7 @@ public class SignUpController {
 			return 1;
 		}
 
-		if(isExist(userId)){
+		if(!isExist(userId)){
 			logger.warning("SignUpController.registerAccount:"+userId+" doesn't exist on Twitter.");
 			return 2;
 		}
@@ -79,6 +79,6 @@ public class SignUpController {
 	 */
 	private String getUserName(String userId) throws TwitterException{
 		AccessTwitter at = new AccessTwitter();
-		return at.getUserName(userId);
+		return MongoDBUtils.sanitize(at.getUserName(userId));
 	}
 }

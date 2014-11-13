@@ -78,7 +78,7 @@ function execute(userId) {
 function setName(userId) {
 	$.ajax({
 		type : 'GET',
-		async : true,
+		async : false,
 		url : check + '/getUserName',
 		data : {
 			userId : userId,
