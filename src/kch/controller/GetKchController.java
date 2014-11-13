@@ -39,10 +39,10 @@ public class GetKchController {
 
 		//scoreから3段階評価への対応をとり、URIを投げる
 		//現状適当
-		if(score > 70){
+		if(score > 55){
 			return GREEN_IMAGE_URI;
 		}
-		else if (score > 30){
+		else if (score > 45){
 			return YELLOW_IMAGE_URI;
 		}
 		else{
