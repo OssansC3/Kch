@@ -9,10 +9,8 @@ $(function() {
 	if (userId == null) {
 		$('#message').text("ユーザーIDが指定されていません");
 		$('#kchImage').append(srcH + 'error.jpg' + srcT);
-		$('#line_chart').css("height", "0px");
-		$('#line_chart').css("width", "0px");
-		$('#gauge_chart').css("height", "0px");
-		$('#gauge_chart').css("width", "0px");
+		$('#line_chart').remove();
+		$('#gauge_chart').remove();
 	} else {
 		isRegistered(userId);
 	}
@@ -34,10 +32,8 @@ function isRegistered(userId) {
 			} else {
 				$('#message').text('ユーザー"' + userId + '"は登録されていません');
 				$('#kchImage').append(srcH + 'error.jpg' + srcT);
-				$('#line_chart').css("height", "0px");
-				$('#line_chart').css("width", "0px");
-				$('#gauge_chart').css("height", "0px");
-				$('#gauge_chart').css("width", "0px");
+				$('#line_chart').remove();
+				$('#gauge_chart').remove();
 			}
 		},
 	});
@@ -46,7 +42,7 @@ function isRegistered(userId) {
 function isAnalysed(userId) {
 	$.ajax({
 		type : 'GET',
-		async : false,
+		async : true,
 		url : check + '/isAnalysed',
 		data : {
 			userId : userId,
@@ -57,17 +53,14 @@ function isAnalysed(userId) {
 			} else {
 				$('#message').text('ユーザー"' + userName + '"はまだ解析されていません');
 				$('#kchImage').append(srcH + 'error.jpg' + srcT);
-				$('#line_chart').css("height", "0px");
-				$('#line_chart').css("width", "0px");
-				$('#gauge_chart').css("height", "0px");
-				$('#gauge_chart').css("width", "0px");
+				$('#line_chart').remove();
+				$('#gauge_chart').remove();
 			}
 		},
 	});
 }
 
 function execute(userId) {
-	google.setOnLoadCallback(drawChart);
 	$.ajax({
 		type : 'GET',
 		async : true,
@@ -80,13 +73,12 @@ function execute(userId) {
 			$('#kchImage').append(srcH + $('return', xml).text() + srcT);
 		},
 	});
-
 }
 
 function setName(userId) {
 	$.ajax({
 		type : 'GET',
-		async : false,
+		async : true;
 		url : check + '/getUserName',
 		data : {
 			userId : userId,
@@ -210,4 +202,6 @@ function getUrlVars() {
 google.load("visualization", "1", {
 	packages : ["corechart", "gauge"],
 });
+
+google.setOnLoadCallback(drawChart);
 
