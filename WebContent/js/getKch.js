@@ -8,8 +8,7 @@ $(function() {
 	var userId = getUrlVars()["userId"];
 	if (userId == null) {
 		$('#message').text("ユーザーIDが指定されていません");
-		$('#kchImage').css("height", "0px");
-		$('#kchImage').css("width", "0px");
+		$('#kchImage').append(srcH + 'error.jpg' + srcT);
 		$('#line_chart').css("height", "0px");
 		$('#line_chart').css("width", "0px");
 		$('#gauge_chart').css("height", "0px");
@@ -34,8 +33,7 @@ function isRegistered(userId) {
 				isAnalysed(userId);
 			} else {
 				$('#message').text('ユーザー"' + userId + '"は登録されていません');
-				$('#kchImage').css("height", "0px");
-				$('#kchImage').css("width", "0px");
+				$('#kchImage').append(srcH + 'error.jpg' + srcT);
 				$('#line_chart').css("height", "0px");
 				$('#line_chart').css("width", "0px");
 				$('#gauge_chart').css("height", "0px");
@@ -58,8 +56,7 @@ function isAnalysed(userId) {
 				execute(userId);
 			} else {
 				$('#message').text('ユーザー"' + userName + '"はまだ解析されていません');
-				$('#kchImage').css("height", "0px");
-				$('#kchImage').css("width", "0px");
+				$('#kchImage').append(srcH + 'error.jpg' + srcT);
 				$('#line_chart').css("height", "0px");
 				$('#line_chart').css("width", "0px");
 				$('#gauge_chart').css("height", "0px");
