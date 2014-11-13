@@ -15,7 +15,7 @@ public class AccessVoiceTest {
         .pitch(105)
         .speed(105)
         .very().happy()
-        .speak("こんにちは");
+        .speak("こんにちは、わたし、けいこです。");
 
 		System.setProperty("voicetext.apikey", API_KEY);
         EmotionalSpeaker.HIKARI.ready()
@@ -36,6 +36,7 @@ public class AccessVoiceTest {
         .very().happy()
         .speak("お仕事頑張ってね！");
 
+        /*
         EmotionalSpeaker.HIKARI.ready()
         .pitch(105)
         .speed(105)
@@ -52,7 +53,8 @@ public class AccessVoiceTest {
         .pitch(105)
         .speed(105)
         .sad()
-        .speak("何想像してるんですか。警察呼びますよ。");
+        .speak("なに想像してるんですか。警察呼びますよ。");
+
 
         EmotionalSpeaker.HIKARI.ready()
         .pitch(90)
@@ -65,6 +67,7 @@ public class AccessVoiceTest {
         .speed(70)
         .very().sad()
         .speak("あなたとはいつまでも、一緒よ。いつまでも");
+        */
 
 	}
 
