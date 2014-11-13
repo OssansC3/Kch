@@ -34,6 +34,9 @@ function drawChart() {
 		},
 		colors : ['blue', 'green', 'red'],
 		title : '感情の変化',
+		tooltip : {
+			trigger : 'none'
+		},
 		vAxis : {
 			textPosition : 'none',
 			gridlines : {
@@ -91,7 +94,7 @@ function getEmotionArray() {
 			var result = $('return', xml);
 			for (var i = 0; i < result.length; i++) {
 				var array = $('array', result.eq(i));
-				scoreArray[i] = ["EM" + (i + 1), eval(array.eq(0).text()), eval(array.eq(1).text()), eval(array.eq(2).text())];
+				scoreArray[i] = ["EM" + (i + 1), eval(array.eq(0).text())-0.05, eval(array.eq(1).text()), eval(array.eq(2).text())+0.05];
 			}
 		},
 	});
