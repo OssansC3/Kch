@@ -46,13 +46,14 @@ public class SignUpController {
 			return 1;
 		}
 
-		if(!isExistingOnTwitter(userId)){
+		String userName = isExistAndGetName(userId);
+		if(userName==null){
 			logger.warning("SignUpController.registerAccount:"+userId+" doesn't exist on Twitter.");
 			return 2;
 		}
 
 		try{
-			am.registerAccount(userId);
+			am.registerAccount(userId,userName);
 			return 0;
 		} catch(MongoException e){
 			logger.severe(e.getMessage());
@@ -61,24 +62,24 @@ public class SignUpController {
 	}
 
 	/**
-	 * ユーザーIDがTwitterに存在するかをチェック
+	 * ユーザーIDがTwitterに存在するかをチェック，存在するならその名前を取得
 	 * @param userId ユーザーID
-	 * @return ユーザーが存在するならtrue,存在しないならfalse
+	 * @return ユーザーが存在するならユーザー名,存在しないならnull
 	 * @throws TwitterException
 	 */
-	private boolean isExistingOnTwitter(String userId) throws TwitterException{
+	private String isExistAndGetName(String userId) throws TwitterException{
 		try{
 			Twitter twitter = TwitterUtils.getInstance().getTwitterInstance();
 			User user = twitter.showUser(userId);
-			if(user==null) return false;
+			if(user==null) return null;
+			else return user.getName();
 		} catch(TwitterException e){
 			//コード34:存在しないならfalseを返し，それ以外ならラップして投げる
-			if(e.getErrorCode()==34) return false;
+			if(e.getErrorCode()==34) return null;
 			else {
 				logger.severe(e.getMessage());
 				throw e;
 			}
 		}
-		return true;
 	}
 }

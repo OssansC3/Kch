@@ -35,12 +35,20 @@ public class GetKchService {
 		return am.isRegistered(userId);
 	}
 
+	public boolean isAnalysed(String userId){
+		return am.isAnalysed(userId);
+	}
+
 	public String[] getUserData(String userId){
 		return toStringArray(am.getUserData(userId));
 	}
 
 	public String[] getUserList(){
 		return toStringArray(am.getUserList());
+	}
+
+	public String getUserName(String userId){
+		return am.getUserName(userId);
 	}
 
 	private int[] toIntArray(List<Integer> list){

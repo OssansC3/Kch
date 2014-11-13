@@ -9,15 +9,10 @@
 	<body>
 		<input id="input" type="text">
 		<input id="load" type="submit" value="読み込む">
-
-		<h2><a href="signup.html">アカウントを作成する人はこちら</a></h2>
+		<h2><span id="message"> </span></h2>
+		<h2><a href="signup.html">ユーザーの登録はこちら</a></h2>
 		<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-		<script type="text/javascript">
-			$('#load').click(function() {
-				var load = $('#input').val();
-				location.href='kch.html?userId='+load;
-			});
-		</script>
+		<script type="text/javascript" src="js/index.js"></script>
 	</body>
 
 </html>

@@ -1,14 +1,76 @@
 var endpoint = 'http://' + location.host + ':8080/axis2/services/GetKchController';
+var check = 'http://' + location.host + ':8080/axis2/services/GetKchService';
 var srcH = '<img src="images/';
 var srcT = '" width="500" height="707"/>';
+var userName = '';
 
 $(function() {
 	var userId = getUrlVars()["userId"];
-	if (userId == "undefined") {
-		userId = "";
+	if (userId == null) {
+		$('#message').text("ユーザーIDが指定されていません");
+		$('#kchImage').css("height", "0px");
+		$('#kchImage').css("width", "0px");
+		$('#line_chart').css("height", "0px");
+		$('#line_chart').css("width", "0px");
+		$('#gauge_chart').css("height", "0px");
+		$('#gauge_chart').css("width", "0px");
+	} else {
+		isRegistered(userId);
 	}
-	$('#message').text("アカウント" + userId);
 
+});
+
+function isRegistered(userId) {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : check + '/isRegistered',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			if ($('return', xml).text() == 'true') {
+				setName(userId);
+				isAnalysed(userId);
+			} else {
+				$('#message').text('ユーザー"' + userId + '"は登録されていません');
+				$('#kchImage').css("height", "0px");
+				$('#kchImage').css("width", "0px");
+				$('#line_chart').css("height", "0px");
+				$('#line_chart').css("width", "0px");
+				$('#gauge_chart').css("height", "0px");
+				$('#gauge_chart').css("width", "0px");
+			}
+		},
+	});
+}
+
+function isAnalysed(userId) {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : check + '/isAnalysed',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			if ($('return', xml).text() == 'true') {
+				execute(userId);
+			} else {
+				$('#message').text('ユーザー"' + userName + '"はまだ解析されていません');
+				$('#kchImage').css("height", "0px");
+				$('#kchImage').css("width", "0px");
+				$('#line_chart').css("height", "0px");
+				$('#line_chart').css("width", "0px");
+				$('#gauge_chart').css("height", "0px");
+				$('#gauge_chart').css("width", "0px");
+			}
+		},
+	});
+}
+
+function execute(userId) {
+	google.setOnLoadCallback(drawChart);
 	$.ajax({
 		type : 'GET',
 		async : true,
@@ -17,10 +79,26 @@ $(function() {
 			userId : userId,
 		},
 		success : function(xml) {
+			$('#message').text('ユーザー"' + userName + '"の感情データ');
 			$('#kchImage').append(srcH + $('return', xml).text() + srcT);
 		},
 	});
-});
+
+}
+
+function setName(userId) {
+	$.ajax({
+		type : 'GET',
+		async : false,
+		url : check + '/getUserName',
+		data : {
+			userId : userId,
+		},
+		success : function(xml) {
+			userName = $('return', xml).text();
+		},
+	});
+}
 
 function drawChart() {
 	var dataArray = [['Number', 'Like', 'Joy', 'Anger']];
@@ -34,6 +112,9 @@ function drawChart() {
 		},
 		colors : ['blue', 'green', 'red'],
 		title : '感情の変化',
+		tooltip : {
+			trigger : 'none'
+		},
 		vAxis : {
 			textPosition : 'none',
 			gridlines : {
@@ -91,7 +172,7 @@ function getEmotionArray() {
 			var result = $('return', xml);
 			for (var i = 0; i < result.length; i++) {
 				var array = $('array', result.eq(i));
-				scoreArray[i] = ["EM" + (i + 1), eval(array.eq(0).text()), eval(array.eq(1).text()), eval(array.eq(2).text())];
+				scoreArray[i] = ["EM" + (i + 1), eval(array.eq(0).text()) - 0.05, eval(array.eq(1).text()), eval(array.eq(2).text()) + 0.05];
 			}
 		},
 	});
@@ -132,5 +213,4 @@ function getUrlVars() {
 google.load("visualization", "1", {
 	packages : ["corechart", "gauge"],
 });
-google.setOnLoadCallback(drawChart);
 

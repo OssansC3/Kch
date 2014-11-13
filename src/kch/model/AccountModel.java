@@ -45,13 +45,36 @@ public class AccountModel {
 	}
 
 	/**
+	 * ユーザーIDが更新済みかをチェック
+	 * @param userId ユーザーID
+	 * @return 登録済みならtrue,そうでないならfalse
+	 * @throws MongoException
+	 */
+	public boolean isAnalysed(String userId) throws MongoException{
+		logger.info("AccountModel.isAnalysed");
+		DBObject query = new BasicDBObject("userId",userId);
+
+		try{
+			DBObject object = coll.findOne(query);
+			if(object == null) return false;
+			Date date = (Date) object.get("date");
+			if(date.after(new Date(10000000))) return true;
+			else return false;
+		} catch(MongoException e){
+			logger.severe(e.getMessage());
+			throw e;
+		}
+	}
+
+	/**
 	 * 取得したユーザーIDをDBに登録する．
 	 * @param userId 登録するユーザー
 	 */
-	public void registerAccount(String userId){
+	public void registerAccount(String userId,String userName){
 		logger.info("AccountModel.registerAccount");
 		DBObject user = new BasicDBObject();
 		user.put("userId",userId);
+		user.put("userName",userName);
 		user.put("like",newScore());
 		user.put("joy",newScore());
 		user.put("anger",newScore());
@@ -344,5 +367,25 @@ public class AccountModel {
 		for(int i=0;i<list.size();i++) scoreList.add((int)list.get(i));
 		return scoreList;
 	}
+
+	/**
+	 * DBからユーザーのディスプレイ名を取得する．
+	 *
+	 * @param userId 取得するユーザー
+	 * @return ディスプレイ名
+	 */
+	public String getUserName(String userId) throws MongoException{
+		logger.info("AccountModel.getUserName");
+		try{
+			if(!this.isRegistered(userId)) return "";
+		}
+		catch(MongoException e){
+			throw e;
+		}
+		DBObject query = new BasicDBObject("userId",userId);
+		DBObject object = coll.findOne(query);
+		return  (String)object.get("userName");
+	}
+
 
 }
