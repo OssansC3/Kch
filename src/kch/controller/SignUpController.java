@@ -2,11 +2,9 @@ package kch.controller;
 
 import java.util.logging.Logger;
 
+import kch.accesser.AccessTwitter;
 import kch.model.AccountModel;
 import kch.utils.MongoDBUtils;
-import kch.utils.TwitterUtils;
-import twitter4j.User;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import com.mongodb.MongoException;
@@ -46,11 +44,12 @@ public class SignUpController {
 			return 1;
 		}
 
-		String userName = isExistAndGetName(userId);
-		if(userName==null){
+		if(isExist(userId)){
 			logger.warning("SignUpController.registerAccount:"+userId+" doesn't exist on Twitter.");
 			return 2;
 		}
+
+		String userName = getUserName(userId);
 
 		try{
 			am.registerAccount(userId,userName);
@@ -62,24 +61,24 @@ public class SignUpController {
 	}
 
 	/**
-	 * ユーザーIDがTwitterに存在するかをチェック，存在するならその名前を取得
+	 * ユーザーIDがTwitterに存在するかをチェック
 	 * @param userId ユーザーID
-	 * @return ユーザーが存在するならユーザー名,存在しないならnull
+	 * @return ユーザーが存在するならtrue,存在しないならfalse
 	 * @throws TwitterException
 	 */
-	private String isExistAndGetName(String userId) throws TwitterException{
-		try{
-			Twitter twitter = TwitterUtils.getInstance().getTwitterInstance();
-			User user = twitter.showUser(userId);
-			if(user==null) return null;
-			else return user.getName();
-		} catch(TwitterException e){
-			//コード34:存在しないならfalseを返し，それ以外ならラップして投げる
-			if(e.getErrorCode()==34) return null;
-			else {
-				logger.severe(e.getMessage());
-				throw e;
-			}
-		}
+	private boolean isExist(String userId) throws TwitterException{
+		AccessTwitter at = new AccessTwitter();
+		return at.isExist(userId);
+	}
+
+	/**
+	 * ユーザーIDから表示名を取得
+	 * @param userId ユーザーID
+	 * @return ユーザーの名前
+	 * @throws TwitterException
+	 */
+	private String getUserName(String userId) throws TwitterException{
+		AccessTwitter at = new AccessTwitter();
+		return at.getUserName(userId);
 	}
 }

@@ -12,6 +12,7 @@ import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.User;
 
 /**
  * ついーとを取得する
@@ -77,6 +78,35 @@ public class AccessTwitter {
 			return new Date();
 		}
 
+	}
+
+	public boolean isExist(String userId) throws TwitterException{
+		try{
+			if(twitter.showUser(userId)==null) return false;
+			else return true;
+		} catch(TwitterException e){
+			//コード34:存在しないならfalseを返し，それ以外ならラップして投げる
+			if(e.getErrorCode()==34) return false;
+			else {
+				logger.severe(e.getMessage());
+				throw e;
+			}
+		}
+	}
+
+	public String getUserName(String userId) throws TwitterException{
+		try{
+			User user = twitter.showUser(userId);
+			if(user==null) return "";
+			else return user.getName();
+		} catch(TwitterException e){
+			//コード34:存在しないならfalseを返し，それ以外ならラップして投げる
+			if(e.getErrorCode()==34) return "";
+			else {
+				logger.severe(e.getMessage());
+				throw e;
+			}
+		}
 	}
 
 	private String cut(String str,String tar){

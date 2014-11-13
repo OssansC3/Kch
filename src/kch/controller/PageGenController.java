@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import twitter4j.TwitterException;
 import kch.accesser.AccessEmotion;
 import kch.accesser.AccessTwitter;
 import kch.model.AccountModel;
@@ -115,8 +116,15 @@ public class PageGenController {
 			return;
 		}
 
-		Emotion emotion = ae.getEmotion(tweetList);
+		String userName = "";
+		try {
+			userName = at.getUserName(userId);
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+		am.setName(userId, userName);
 
+		Emotion emotion = ae.getEmotion(tweetList);
 		am.setScore(userId, emotion);
 		return;
 	}
