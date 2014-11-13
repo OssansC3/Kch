@@ -1,14 +1,45 @@
 var endpoint = 'http://' + location.host + ':8080/axis2/services/GetKchController';
+var check = 'http://' + location.host + ':8080/axis2/services/GetKchService';
 var srcH = '<img src="images/';
 var srcT = '" width="500" height="707"/>';
 
 $(function() {
 	var userId = getUrlVars()["userId"];
-	if (userId == "undefined") {
-		userId = "";
+	if (userId == null) {
+		$('#message').text("ユーザーIDが指定されていません");
+		$('#kchImage').css("height", "0px");
+		$('#kchImage').css("width", "0px");
+		$('#line_chart').css("height", "0px");
+		$('#line_chart').css("width", "0px");
+		$('#gauge_chart').css("height", "0px");
+		$('#gauge_chart').css("width", "0px");
+	} else {
+		$.ajax({
+			type : 'GET',
+			async : false,
+			url : check + '/isRegistered',
+			data : {
+				userId : userId,
+			},
+			success : function(xml) {
+				if ($('return', xml).text() == 'true') {
+					execute(userId);
+				} else {
+					$('#message').text("ユーザー" + userId + "は登録されていません");
+					$('#kchImage').css("height", "0px");
+					$('#kchImage').css("width", "0px");
+					$('#line_chart').css("height", "0px");
+					$('#line_chart').css("width", "0px");
+					$('#gauge_chart').css("height", "0px");
+					$('#gauge_chart').css("width", "0px");
+				}
+			},
+		});
 	}
-	$('#message').text("アカウント" + userId);
 
+});
+
+function execute(userId) {
 	$.ajax({
 		type : 'GET',
 		async : true,
@@ -17,10 +48,13 @@ $(function() {
 			userId : userId,
 		},
 		success : function(xml) {
+			$('#message').text("ユーザー" + userId + "の感情データ");
 			$('#kchImage').append(srcH + $('return', xml).text() + srcT);
 		},
 	});
-});
+
+	google.setOnLoadCallback(drawChart);
+}
 
 function drawChart() {
 	var dataArray = [['Number', 'Like', 'Joy', 'Anger']];
@@ -94,7 +128,7 @@ function getEmotionArray() {
 			var result = $('return', xml);
 			for (var i = 0; i < result.length; i++) {
 				var array = $('array', result.eq(i));
-				scoreArray[i] = ["EM" + (i + 1), eval(array.eq(0).text())-0.05, eval(array.eq(1).text()), eval(array.eq(2).text())+0.05];
+				scoreArray[i] = ["EM" + (i + 1), eval(array.eq(0).text()) - 0.05, eval(array.eq(1).text()), eval(array.eq(2).text()) + 0.05];
 			}
 		},
 	});
@@ -135,5 +169,4 @@ function getUrlVars() {
 google.load("visualization", "1", {
 	packages : ["corechart", "gauge"],
 });
-google.setOnLoadCallback(drawChart);
 
