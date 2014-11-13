@@ -14,20 +14,27 @@ public class AccessVoiceTest {
         EmotionalSpeaker.HIKARI.ready()
         .pitch(105)
         .speed(105)
+        .very().happy()
+        .speak("こんにちは");
+
+		System.setProperty("voicetext.apikey", API_KEY);
+        EmotionalSpeaker.HIKARI.ready()
+        .pitch(105)
+        .speed(105)
         .happy()
         .speak("グロメンスーパーイケーバル大学院生さん");
 
         EmotionalSpeaker.HIKARI.ready()
         .pitch(105)
         .speed(105)
-        .very().happy()
-        .speak("私とセックスしてください！");
+        .happy()
+        .speak("今日も一日");
 
         EmotionalSpeaker.HIKARI.ready()
         .pitch(105)
         .speed(105)
         .very().happy()
-        .speak("濡れてるの！抱いて！！！");
+        .speak("お仕事頑張ってね！");
 
         EmotionalSpeaker.HIKARI.ready()
         .pitch(105)
